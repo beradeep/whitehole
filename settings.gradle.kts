@@ -15,6 +15,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "telegram-drive"
+rootProject.name = "whitehole"
 include(":app")
  

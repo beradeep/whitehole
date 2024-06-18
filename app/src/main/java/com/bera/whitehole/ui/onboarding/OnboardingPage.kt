@@ -1,0 +1,137 @@
+package com.bera.whitehole.ui.onboarding
+
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.bera.whitehole.R
+import com.bera.whitehole.api.BotApi
+import com.bera.whitehole.data.localdb.Preferences
+import kotlinx.coroutines.launch
+
+@Preview
+@Composable
+fun OnboardingPage(
+    modifier: Modifier = Modifier,
+    botApi: BotApi = BotApi,
+    navController: NavController = rememberNavController()
+) {
+    val scope = rememberCoroutineScope()
+    var inputToken by remember { mutableStateOf("") }
+    var isValidToken by remember { mutableStateOf(true) }
+    var showUidComponent by remember { mutableStateOf(false) }
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Spacer(modifier = Modifier.weight(1f))
+            Image(
+                modifier = Modifier.clip(CircleShape),
+                painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                contentScale = ContentScale.FillBounds,
+                contentDescription = null
+            )
+            Spacer(modifier = Modifier.height(80.dp))
+            TextField(
+                value = inputToken,
+                onValueChange = { inputToken = it },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number
+                ),
+                isError = !isValidToken,
+                supportingText = {
+                    AnimatedContent(targetState = isValidToken, label = "SupportText") {
+                        if (it) {
+                            Text(
+                                text = "Recommended to copy-paste only to avoid error.",
+                                style = MaterialTheme.typography.labelSmall
+                            )
+                        } else {
+                            Text(text = "Token cannot be empty.")
+                        }
+                    }
+                },
+                colors = TextFieldDefaults.colors().copy(
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    errorIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                    errorSupportingTextColor = MaterialTheme.colorScheme.error
+                ),
+                label = { Text(text = "Bot Token") },
+                singleLine = true,
+                shape = RoundedCornerShape(16.dp),
+                textStyle = MaterialTheme.typography.bodySmall,
+                modifier = Modifier
+                    .width(300.dp)
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Button(
+                modifier = Modifier
+                    .width(300.dp)
+                    .height(50.dp),
+                shape = RoundedCornerShape(16.dp),
+                onClick = {
+                    scope.launch {
+                        if (inputToken.isNotBlank()) {
+                            Preferences.edit {
+                                putString(Preferences.botToken, inputToken)
+                            }
+                            showUidComponent = true
+                        } else {
+                            isValidToken = false
+                        }
+                    }
+                }) {
+                Text(text = "Proceed")
+            }
+            Spacer(modifier = Modifier.weight(1f))
+        }
+        if (showUidComponent) {
+            UidComponent(
+                onDismissRequest = {},
+                onNavigate = {
+                    navController.navigate("main") {
+                        popUpTo("onboarding") {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
+        }
+    }
+}
