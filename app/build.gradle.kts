@@ -13,7 +13,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.bera.telegram_drive"
+        applicationId = "com.bera.whitehole"
         minSdk = 30
         targetSdk = 34
         versionCode = 1
@@ -23,6 +23,20 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        val properties = Properties()
+        properties.load(rootProject.file("local.properties").inputStream())
+
+        buildConfigField(
+            "String",
+            "POSTHOG_API_KEY",
+            "\"${properties.getProperty("POSTHOG_API_KEY") ?: System.getenv("POSTHOG_API_KEY")}\""
+        )
+        buildConfigField(
+            "String",
+            "POSTHOG_HOST",
+            "\"${properties.getProperty("POSTHOG_HOST") ?: System.getenv("POSTHOG_HOST")}\""
+        )
     }
 
     buildTypes {
@@ -135,4 +149,7 @@ dependencies {
     //Paging
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)
+
+    //Analytics
+    implementation(libs.posthog.android)
 }

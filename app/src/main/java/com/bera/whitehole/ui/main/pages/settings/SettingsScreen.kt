@@ -25,6 +25,7 @@ import com.bera.whitehole.R
 import com.bera.whitehole.data.localdb.Preferences
 import com.bera.whitehole.data.localdb.backup.BackupHelper
 import com.bera.whitehole.workers.WorkModule
+import com.posthog.PostHog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -61,33 +62,41 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
             Text(text = "Backup", style = MaterialTheme.typography.titleMedium)
             Spacer(modifier = Modifier.height(6.dp))
             SettingsSwitchCard(
-                text = "Auto Backup Photos",
+                text = "Auto periodic backup",
                 icon = painterResource(id = R.drawable.cloud_arrow_up_solid),
                 isChecked = isAutoPhotoBackupEnabled
             ) {
                 isAutoPhotoBackupEnabled = !isAutoPhotoBackupEnabled
-                if (isAutoPhotoBackupEnabled) WorkModule.backupPeriodic()
-                else WorkModule.cancelPeriodicBackupWorker()
+                if (isAutoPhotoBackupEnabled) {
+                    WorkModule.backupPeriodic()
+                    PostHog.capture(event = "enabled-periodic-backup")
+                }
+                else {
+                    WorkModule.cancelPeriodicBackupWorker()
+                    PostHog.capture(event = "disabled-periodic-backup")
+                }
             }
             Spacer(modifier = Modifier.height(6.dp))
             SettingsCard(
-                settingHeaderText = "Restore all cloud photos",
+                settingHeaderText = "Restore all from cloud",
                 painterResourceID = R.drawable.cloud_arrow_down_solid
             ) {
+                PostHog.capture(event = "export-db")
                 WorkModule.restoreAll()
             }
             Spacer(modifier = Modifier.height(6.dp))
             SettingsCard(
-                settingHeaderText = "Export Backup Database",
+                settingHeaderText = "Export backup database",
                 painterResourceID = R.drawable.file_export_solid
             ) {
                 createPhotosBackupFile.launch("whitehole_photos_backup.json")
             }
             Spacer(modifier = Modifier.height(6.dp))
             SettingsCard(
-                settingHeaderText = "Import Backup Database",
+                settingHeaderText = "Import backup database",
                 painterResourceID = R.drawable.file_import_solid
             ) {
+                PostHog.capture("import-db")
                 importPhotosBackupFile.launch(arrayOf(BackupHelper.JSON_MIME))
             }
         }

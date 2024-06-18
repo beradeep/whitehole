@@ -40,6 +40,7 @@ import com.bera.whitehole.data.models.PhotoModel
 import com.bera.whitehole.ui.main.pages.local.UploadState
 import com.bera.whitehole.utils.coil.ImageLoaderModule
 import com.bera.whitehole.workers.WorkModule
+import com.posthog.PostHog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -134,6 +135,7 @@ fun PhotoView(
                         contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                         uploadState = photoUploadState,
                         onClickUpload = {
+                            PostHog.capture("upload-single")
                             WorkModule.instantUpload(photo.pathUri.toUri())
                             scope.launch(Dispatchers.IO) {
                                 WorkModule.observeInstantWorkerById(photo.localId!!)

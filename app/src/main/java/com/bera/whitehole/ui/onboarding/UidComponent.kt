@@ -32,6 +32,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.bera.whitehole.api.BotApi
 import com.bera.whitehole.data.localdb.Preferences
 import com.github.kotlintelegrambot.entities.ChatId
+import com.posthog.PostHog
 import kotlinx.coroutines.launch
 
 @Composable
@@ -101,6 +102,7 @@ fun UidComponent(
                                 Preferences.edit {
                                     putLong(Preferences.channelId, id)
                                 }
+                                PostHog.identify(id.toString())
                                 onNavigate()
                             } else {
                                 isValidInput = false

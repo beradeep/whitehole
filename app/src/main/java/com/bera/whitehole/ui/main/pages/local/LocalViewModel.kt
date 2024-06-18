@@ -19,7 +19,7 @@ class LocalViewModel: ViewModel() {
     val localPhotosFlow: Flow<PagingData<PhotoModel.LocalPhotoModel>> by lazy {
         Pager(
             config = PagingConfig(
-                pageSize = 32
+                pageSize = 96
             ),
             pagingSourceFactory = { LocalPhotoSource }
         ).flow.cachedIn(viewModelScope)

@@ -19,6 +19,7 @@ lifecycleRuntimeKtx = "2.8.2"
 materialIconsExtended = "1.6.8"
 navigationCompose = "2.8.0-beta03"
 paging = "3.3.0"
+posthogAndroid = "3.1.7"
 room = "2.6.1"
 okhttp = "4.12.0"
 retrofit = "2.11.0"
@@ -67,6 +68,7 @@ kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutinesAndroid" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+posthog-android = { module = "com.posthog:posthog-android", version.ref = "posthogAndroid" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 telegram = { module = "io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram", version.ref = "telegram" }
 
