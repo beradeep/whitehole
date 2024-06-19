@@ -35,8 +35,10 @@
 
 <!-- ---------- Download ---------- -->
 ## Download
-<div align="start">    
+<div align="start">   
+  
   [<img src="https://raw.githubusercontent.com/vadret/android/master/assets/get-github.png" alt="Get it on GitHub" height="80">](https://github.com/beradeep/whitehole/releases)
+  
 </div>
 
 <!-- ---------- Usage ---------- -->
