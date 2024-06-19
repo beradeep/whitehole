@@ -2,7 +2,7 @@
 <div align="center">
   <img width="200" height="200"src="app/src/main/ic_launcher-playstore.png">
   <h1>Whitehole</h1>
-<p>Create a self-onwed photo backup space on Telegram.</p>
+<p>Create a self-owned photo backup space on Telegram.</p>
 
 <!-- ---------- Badges ---------- -->
   <div align="center">
