@@ -35,11 +35,21 @@
 
 <!-- ---------- Download ---------- -->
 ## Download
-  <div align="start">
-    
-[<img src="https://raw.githubusercontent.com/vadret/android/master/assets/get-github.png" alt="Get it on GitHub" height="80">](https://github.com/beradeep/whitehole/releases)
-
+<div align="start">    
+  [<img src="https://raw.githubusercontent.com/vadret/android/master/assets/get-github.png" alt="Get it on GitHub" height="80">](https://github.com/beradeep/whitehole/releases)
 </div>
+
+<!-- ---------- Usage ---------- -->
+## Usage
+
+- Visit BotFather on telegram and create a bot; you'll get a token.
+- Open Whitehole app, paste the bot token and proceed.
+- Now, you'll be asked for a unique id.
+- Next create a private group, and add the bot to the group.
+- To get the unique id, type "/start" in the group.
+- Copy and paste the unique id the app and proceed.
+- Voilà! Your app is ready to use.
+
 
 <!-- ---------- Screenshots ---------- -->
 ## Screenshots
