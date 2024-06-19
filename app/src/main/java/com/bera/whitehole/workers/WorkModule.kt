@@ -30,14 +30,14 @@ object WorkModule {
             .build()
 
         val periodicUploadWorkRequest =
-            PeriodicWorkRequestBuilder<PeriodicPhotoBackupWorker>(Duration.ofDays(3))
+            PeriodicWorkRequestBuilder<PeriodicPhotoBackupWorker>(Duration.ofDays(7))
                 .setInputData(
                     workDataOf(PeriodicPhotoBackupWorker.KEY_COMPRESSION_THRESHOLD to 1024 * 50L)
                 )
                 .setConstraints(constraints)
                 .setBackoffCriteria(
                     backoffPolicy = BackoffPolicy.EXPONENTIAL,
-                    duration = Duration.ofDays(7)
+                    duration = Duration.ofMinutes(20)
                 )
                 .build()
 
