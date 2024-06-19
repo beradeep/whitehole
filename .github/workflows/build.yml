@@ -27,6 +27,10 @@ jobs:
           distribution: "adopt"
           cache: "gradle"
 
+      - name: Create local.properties with SDK location
+        run: |
+          echo "sdk.dir=${ANDROID_SDK_ROOT}" > local.properties
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
