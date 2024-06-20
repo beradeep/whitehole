@@ -68,7 +68,7 @@
 ## Feedback and contributions
 ***All contributions are very welcome!***
 
-* Bug reports and feature requests can be submitted [here](https://github.com/beradeep/whitehole/issues) (please make sure to fill out all the requested information properly!).
+* Bug reports and feature requests can be submitted [here](https://github.com/beradeep/whitehole/issues).
 * If you are a developer and wish to contribute to the app, please **fork** the project and submit a [**pull request**](https://help.github.com/articles/about-pull-requests/).
 
 ## Credits
