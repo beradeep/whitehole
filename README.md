@@ -7,7 +7,7 @@
 <!-- ---------- Badges ---------- -->
   <div align="center">
     <img alt="License" src="https://img.shields.io/github/license/beradeep/whitehole?color=c3e7ff&style=flat-square">
-    <img alt="Downloads" src="https://img.shields.io/github/downloads/beradeep/whitehole/total.svg?color=c3e7ff&style=flat-square">
+    <img alt="Downloads" src="https://img.shields.io/github/downloads/beradeep/whitehole/total?color=c3e7ff&style=flat-square">
     <img alt="Last commit" src="https://img.shields.io/github/last-commit/beradeep/whitehole?color=c3e7ff&style=flat-square">
     <img alt="Repo size" src="https://img.shields.io/github/repo-size/beradeep/whitehole?color=c3e7ff&style=flat-square">
     <img alt="Stars" src="https://img.shields.io/github/stars/beradeep/whitehole?color=c3e7ff&style=flat-square">
@@ -16,7 +16,7 @@
 
 <!-- ----------   Labels ---------- -->
 <div align="center"> 
-  <img alt="API" src="https://img.shields.io/badge/Api%2024+-50f270?logo=android&logoColor=black&style=for-the-badge"/>
+  <img alt="API" src="https://img.shields.io/badge/Api%2030+-50f270?logo=android&logoColor=black&style=for-the-badge"/>
   <img alt="Kotlin" src="https://img.shields.io/badge/Kotlin-a503fc?logo=kotlin&logoColor=white&style=for-the-badge"/>
   <img alt="Jetpack Compose" src="https://img.shields.io/static/v1?style=for-the-badge&message=Jetpack+Compose&color=4285F4&logo=Jetpack+Compose&logoColor=FFFFFF&label="/>
   <img alt="material" src="https://custom-icon-badges.demolab.com/badge/material%20you-lightblue?style=for-the-badge&logocolor=333&logo=material-you"/>
@@ -48,7 +48,7 @@
 - Open Whitehole app, paste the bot token and proceed.
 - Now, you'll be asked for a unique id.
 - Next create a private group, and add the bot to the group.
-- To get the unique id, type "/start" in the group.
+- To get the unique id, type `/start` in the group.
 - Copy and paste the unique id the app and proceed.
 - Voilà! Your app is ready to use.
 
@@ -68,7 +68,7 @@
 ## Feedback and contributions
 ***All contributions are very welcome!***
 
-* Bug reports and feature requests can be submitted [here](https://github.com/beradeep/whitehole/issues) (please make sure to fill out all the requested information properly!).
+* Bug reports and feature requests can be submitted [here](https://github.com/beradeep/whitehole/issues).
 * If you are a developer and wish to contribute to the app, please **fork** the project and submit a [**pull request**](https://help.github.com/articles/about-pull-requests/).
 
 ## Credits
