@@ -1,17 +1,13 @@
 package com.bera.whitehole.api
 
-import com.bera.whitehole.BuildConfig
 import com.bera.whitehole.data.localdb.Preferences
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.bot
 import com.github.kotlintelegrambot.dispatch
 import com.github.kotlintelegrambot.dispatcher.command
-import com.github.kotlintelegrambot.dispatcher.message
-import com.github.kotlintelegrambot.dispatcher.text
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Message
 import com.github.kotlintelegrambot.entities.TelegramFile
-import com.github.kotlintelegrambot.extensions.filters.Filter
 import com.github.kotlintelegrambot.network.Response
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

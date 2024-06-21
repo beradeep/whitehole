@@ -25,25 +25,26 @@ sealed class Query(
         ),
     )
 
-    class PhotoQuery: Query(
+    class PhotoQuery : Query(
         projection = arrayOf(
             MediaStore.Images.ImageColumns._ID,
             MediaStore.Images.ImageColumns.DATE_MODIFIED,
             MediaStore.Images.ImageColumns.MIME_TYPE
         ),
-        bundle = Bundle().apply {
-            putString(
-                ContentResolver.QUERY_ARG_SORT_COLUMNS,
-                MediaStore.Images.ImageColumns.DATE_MODIFIED
-            )
-            putInt(
-                ContentResolver.QUERY_ARG_SORT_DIRECTION,
-                ContentResolver.QUERY_SORT_DIRECTION_DESCENDING
-            )
-        }
+        bundle = Bundle()
+            .apply {
+                putString(
+                    ContentResolver.QUERY_ARG_SORT_COLUMNS,
+                    MediaStore.Images.ImageColumns.DATE_MODIFIED,
+                )
+                putInt(
+                    ContentResolver.QUERY_ARG_SORT_DIRECTION,
+                    ContentResolver.QUERY_SORT_DIRECTION_DESCENDING
+                )
+            }
     )
 
-    class VideoQuery: Query(
+    class VideoQuery : Query(
         projection = arrayOf(
             MediaStore.Video.VideoColumns._ID,
             MediaStore.Video.VideoColumns.DATE_MODIFIED,

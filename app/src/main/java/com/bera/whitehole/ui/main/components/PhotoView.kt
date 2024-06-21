@@ -7,10 +7,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.CloudOff
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.work.WorkInfo
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.bera.whitehole.data.localdb.DbHolder
 import com.bera.whitehole.data.models.PhotoModel
@@ -103,21 +108,63 @@ fun PhotoView(
                 .zoomArea(zoomState),
             contentAlignment = Alignment.Center
         ) {
-            val lowRes = rememberAsyncImagePainter(model = photo.pathUri)
-            AsyncImage(
-                imageLoader = if (isLocal) ImageLoaderModule.defaultImageLoader else ImageLoaderModule.remoteImageLoader,
-                model = if (isLocal) photo.pathUri else ImageRequest.Builder(context)
-                    .data(photo)
-                    .placeholderMemoryCacheKey(photo.remoteId)
-                    .memoryCacheKey(photo.remoteId)
-                    .build(),
-                contentDescription = "photo",
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .zoomImage(zoomState),
-                placeholder = lowRes
-            )
+            if (isLocal) {
+                AsyncImage(
+                    imageLoader = ImageLoaderModule.defaultImageLoader,
+                    model = photo.pathUri,
+                    contentDescription = "photo"
+                )
+            } else {
+                SubcomposeAsyncImage(
+                    imageLoader = ImageLoaderModule.defaultImageLoader,
+                    model = photo.pathUri,
+                    contentDescription = "photo",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.fillMaxSize(),
+                    error = {
+                        SubcomposeAsyncImage(
+                            imageLoader = ImageLoaderModule.remoteImageLoader,
+                            model = ImageRequest.Builder(context)
+                                .data(photo)
+                                .placeholderMemoryCacheKey(photo.remoteId)
+                                .memoryCacheKey(photo.remoteId)
+                                .build(),
+                            contentScale = ContentScale.Fit,
+                            modifier = Modifier.fillMaxSize(),
+                            contentDescription = "photo",
+                            loading = {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .aspectRatio(1f)
+                                        .background(MaterialTheme.colorScheme.primaryContainer),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    LoadAnimation()
+                                }
+                            },
+                            error = {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .aspectRatio(1f)
+                                        .background(MaterialTheme.colorScheme.primaryContainer),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    Icon(
+                                        tint = MaterialTheme.colorScheme.onSurface,
+                                        imageVector = Icons.Rounded.CloudOff,
+                                        contentDescription = "error",
+                                        modifier = Modifier
+                                            .size(48.dp)
+                                            .padding(16.dp)
+                                    )
+                                }
+                            }
+                        )
+                    }
+                )
+            }
             Column(
                 Modifier
                     .fillMaxWidth()

@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,9 +25,11 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import coil.compose.AsyncImage
 import com.bera.whitehole.data.models.PhotoModel
+import com.bera.whitehole.ui.main.components.LoadAnimation
 import com.bera.whitehole.ui.main.components.PhotoPageView
 import com.bera.whitehole.ui.main.components.itemsPaging
 import com.bera.whitehole.utils.coil.ImageLoaderModule
+import kotlinx.coroutines.delay
 
 @Composable
 fun LocalPhotoGrid(
@@ -37,7 +40,7 @@ fun LocalPhotoGrid(
         modifier = Modifier.fillMaxSize()
     ) {
         if (localPhotos.loadState.refresh == LoadState.Loading) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            LoadAnimation(modifier = Modifier.align(Alignment.Center))
         } else {
             LazyVerticalGrid(
                 modifier = Modifier.fillMaxSize(),
@@ -60,7 +63,7 @@ fun LocalPhotoGrid(
                             imageLoader = ImageLoaderModule.defaultImageLoader,
                             model = localPhoto?.pathUri,
                             contentDescription = null,
-                            contentScale = ContentScale.Fit,
+                            contentScale = ContentScale.Crop,
                             modifier = Modifier
                                 .fillMaxWidth()
                         )
