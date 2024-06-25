@@ -42,7 +42,7 @@
 </div>
 
 <!-- ---------- Usage ---------- -->
-## Usage
+## Getting Started
 
 - Visit BotFather on telegram and create a bot; you'll get a token.
 - Open Whitehole app, paste the bot token and proceed.
