@@ -15,15 +15,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-class LocalViewModel: ViewModel() {
+class LocalViewModel : ViewModel() {
     val localPhotosFlow: Flow<PagingData<PhotoModel.LocalPhotoModel>> by lazy {
         Pager(
             config = PagingConfig(
-                pageSize = 96
+                pageSize = PAGE_SIZE,
+                prefetchDistance = PREFETCH_DISTANCE,
+                jumpThreshold = JUMP_THRESHOLD,
             ),
             pagingSourceFactory = { LocalPhotoSource }
         ).flow.cachedIn(viewModelScope)
     }
+
     fun uploadMultiplePhotos(
         uris: List<Uri>,
     ) {
@@ -32,5 +35,11 @@ class LocalViewModel: ViewModel() {
                 WorkModule.instantUpload(uri)
             }
         }
+    }
+
+    companion object {
+        const val PAGE_SIZE = 32
+        const val PREFETCH_DISTANCE = 2 * 32
+        const val JUMP_THRESHOLD = 5 * 32
     }
 }

@@ -21,15 +21,15 @@ class DownloadAllPhotosWorker(
     params: WorkerParameters
 ) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result {
-        return withContext(Dispatchers.IO) {
-            try {
-                setForeground(
-                    foregroundInfo = getForegroundInfo()
-                )
-            } catch (e: IllegalStateException) {
-                context.toastFromMainThread(e.localizedMessage)
-            }
-            try {
+        try {
+            setForeground(
+                foregroundInfo = getForegroundInfo()
+            )
+        } catch (e: IllegalStateException) {
+            context.toastFromMainThread(e.localizedMessage)
+        }
+        try {
+            withContext(Dispatchers.IO) {
                 DbHolder.database.photoDao().getAllPhotos()
                     .fastForEach { photo ->
                         val byteArray = BotApi.getFile(photo.remoteId)
@@ -64,12 +64,12 @@ class DownloadAllPhotosWorker(
                             DbHolder.database.photoDao().upsertPhotos(newPhoto)
                         }
                     }
-                return@withContext Result.success()
-            } catch (e: Exception) {
-                e.printStackTrace()
-                context.toastFromMainThread(e.localizedMessage)
-                return@withContext Result.failure()
             }
+            return Result.success()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            context.toastFromMainThread(e.localizedMessage)
+            return Result.failure()
         }
     }
 

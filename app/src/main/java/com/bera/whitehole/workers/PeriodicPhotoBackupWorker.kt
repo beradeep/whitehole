@@ -36,26 +36,26 @@ class PeriodicPhotoBackupWorker(
     private val channelId: Long = Preferences.getLong(Preferences.channelId, 0L)
     private val botApi: BotApi = BotApi
     override suspend fun doWork(): Result {
+        try {
+            setForeground(
+                foregroundInfo = getForegroundInfo()
+            )
+        } catch (e: IllegalStateException) {
+            appContext.toastFromMainThread(e.localizedMessage)
+        }
+        val compressionThresholdInBytes = params.inputData.getLong(
+            KEY_COMPRESSION_THRESHOLD,
+            0L
+        )
+        val projection = arrayOf(
+            MediaStore.Images.Media._ID,
+            MediaStore.Images.Media.DISPLAY_NAME,
+            MediaStore.Images.Media.DATE_ADDED
+        )
+        val imageList = mutableListOf<Uri>()
+        val sortOrder = "${MediaStore.Images.Media.DATE_ADDED} DESC"
+
         return withContext(Dispatchers.IO) {
-            try {
-                setForeground(
-                    foregroundInfo = getForegroundInfo()
-                )
-            } catch (e: IllegalStateException) {
-                appContext.toastFromMainThread(e.localizedMessage)
-            }
-            val compressionThresholdInBytes = params.inputData.getLong(
-                KEY_COMPRESSION_THRESHOLD,
-                0L
-            )
-            val projection = arrayOf(
-                MediaStore.Images.Media._ID,
-                MediaStore.Images.Media.DISPLAY_NAME,
-                MediaStore.Images.Media.DATE_ADDED
-            )
-
-            val sortOrder = "${MediaStore.Images.Media.DATE_ADDED} DESC"
-
             val cursor = appContext.contentResolver.query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 projection,
@@ -63,9 +63,6 @@ class PeriodicPhotoBackupWorker(
                 null,
                 sortOrder
             )
-
-            val imageList = mutableListOf<Uri>()
-
             cursor?.use {
                 val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
                 while (cursor.moveToNext()) {
@@ -106,7 +103,7 @@ class PeriodicPhotoBackupWorker(
                                     outputBytes = it.toByteArray()
                                     quality -= (quality * 0.1).roundToInt()
                                 }
-                            } while (outputBytes.size > compressionThresholdInBytes && quality > 10)
+                            } while (outputBytes.size > compressionThresholdInBytes && quality > 25)
                             tempFile = File.createTempFile(
                                 "${Random.nextLong()}",
                                 ext

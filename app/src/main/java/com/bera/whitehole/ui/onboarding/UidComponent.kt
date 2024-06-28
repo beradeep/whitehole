@@ -2,6 +2,8 @@ package com.bera.whitehole.ui.onboarding
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,9 +12,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -25,10 +29,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.bera.whitehole.R
 import com.bera.whitehole.api.BotApi
 import com.bera.whitehole.data.localdb.Preferences
 import com.github.kotlintelegrambot.entities.ChatId
@@ -44,6 +51,7 @@ fun UidComponent(
 ) {
     var inputIdState by remember { mutableStateOf("") }
     var isValidInput by remember { mutableStateOf(true) }
+    var showStepsDisclaimer by remember { mutableStateOf(true) }
     val scope = rememberCoroutineScope()
     LaunchedEffect(key1 = Unit) {
         botApi.create()
@@ -53,8 +61,40 @@ fun UidComponent(
         onDismissRequest = onDismissRequest,
         properties = remember { DialogProperties(usePlatformDefaultWidth = false) }
     ) {
+        AnimatedVisibility(visible = showStepsDisclaimer) {
+            AlertDialog(
+                onDismissRequest = {},
+                icon = {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                        contentDescription = "app_icon"
+                    )
+                },
+                confirmButton = {
+                    TextButton(onClick = { showStepsDisclaimer = false }) {
+                        Text(
+                            text = "GOT IT",
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+                },
+                title = { Text(text = "Just a few more..") },
+                text = {
+                    Column {
+                        Text(text = "1. Create a private group on Telegram.")
+                        Text(text = "2. Add the bot to the group.")
+                        Text(text = "3. Type \"/start\" in the group.")
+                        Text(text = "4. Copy and paste the unique id here.")
+                        Text(text = "5. Click on Proceed.")
+                    }
+                }
+            )
+        }
         Column(
-            modifier = modifier.fillMaxSize(),
+            modifier = modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -68,10 +108,13 @@ fun UidComponent(
                 isError = !isValidInput,
                 supportingText = {
                     AnimatedVisibility(visible = !isValidInput, enter = slideInVertically()) {
-                        Text(
-                            text = "Invalid UID or token.",
-                            style = MaterialTheme.typography.labelSmall
-                        )
+                        Column {
+                            Text(
+                                text = "Invalid UID or token.",
+                                style = MaterialTheme.typography.labelSmall
+                            )
+                            Spacer(modifier = Modifier.height(6.dp))
+                        }
                     }
                 },
                 colors = TextFieldDefaults.colors().copy(
@@ -79,7 +122,7 @@ fun UidComponent(
                     unfocusedIndicatorColor = Color.Transparent,
                     errorIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,
-                    errorSupportingTextColor = MaterialTheme.colorScheme.onError
+                    errorSupportingTextColor = MaterialTheme.colorScheme.error
                 ),
                 label = { Text(text = "Unique ID (/start in gc)") },
                 singleLine = true,

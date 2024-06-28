@@ -1,6 +1,7 @@
 package com.bera.whitehole.api
 
 import com.bera.whitehole.data.localdb.Preferences
+import com.bera.whitehole.utils.Constants.SAMPLE_API_KEY
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.bot
 import com.github.kotlintelegrambot.dispatch
@@ -23,7 +24,7 @@ object BotApi {
         bot = bot {
             token = Preferences.getString(
                 Preferences.botToken,
-                "123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"
+                SAMPLE_API_KEY,
             )
             dispatch {
                 command("start") {

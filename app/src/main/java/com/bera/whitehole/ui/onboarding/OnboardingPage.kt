@@ -1,6 +1,8 @@
 package com.bera.whitehole.ui.onboarding
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,9 +14,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -29,6 +33,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -49,6 +55,7 @@ fun OnboardingPage(
     val scope = rememberCoroutineScope()
     var inputToken by remember { mutableStateOf("") }
     var isValidToken by remember { mutableStateOf(true) }
+    var showStepsDisclaimer by remember { mutableStateOf(true) }
     var showUidComponent by remember { mutableStateOf(false) }
     Box(
         modifier = Modifier.fillMaxSize()
@@ -74,15 +81,21 @@ fun OnboardingPage(
                 ),
                 isError = !isValidToken,
                 supportingText = {
-                    AnimatedContent(targetState = isValidToken, label = "SupportText") {
-                        if (it) {
-                            Text(
-                                text = "Recommended to copy-paste only to avoid error.",
-                                style = MaterialTheme.typography.labelSmall
-                            )
-                        } else {
-                            Text(text = "Token cannot be empty.")
+                    Column {
+                        AnimatedContent(targetState = isValidToken, label = "SupportText") {
+                            if (it) {
+                                Text(
+                                    text = "Recommended to copy-paste only to avoid error.",
+                                    style = MaterialTheme.typography.labelSmall
+                                )
+                            } else {
+                                Text(
+                                    text = "Token cannot be empty.",
+                                    style = MaterialTheme.typography.labelSmall
+                                )
+                            }
                         }
+                        Spacer(modifier = Modifier.height(6.dp))
                     }
                 },
                 colors = TextFieldDefaults.colors().copy(
@@ -99,7 +112,7 @@ fun OnboardingPage(
                 modifier = Modifier
                     .width(300.dp)
             )
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(4.dp))
             Button(
                 modifier = Modifier
                     .width(300.dp)
@@ -120,6 +133,36 @@ fun OnboardingPage(
                 Text(text = "Proceed")
             }
             Spacer(modifier = Modifier.weight(1f))
+        }
+        AnimatedVisibility(visible = showStepsDisclaimer) {
+            AlertDialog(
+                onDismissRequest = {},
+                icon = {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                        contentDescription = "app_icon"
+                    )
+                },
+                confirmButton = {
+                    TextButton(onClick = { showStepsDisclaimer = false }) {
+                        Text(
+                            text = "GOT IT",
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+                },
+                title = { Text(text = "Getting Started") },
+                text = {
+                    Column {
+                        Text(text = "1. Visit BotFather on telegram")
+                        Text(text = "2. Create a new bot.")
+                        Text(text = "3. Get the bot token from BotFather.")
+                        Text(text = "4. Paste the token here.")
+                        Text(text = "5. Click on Proceed.")
+                    }
+                }
+            )
         }
         if (showUidComponent) {
             UidComponent(

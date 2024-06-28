@@ -24,14 +24,14 @@ class InstantPhotoUploadWorker(
     private val channelId = Preferences.getLong(Preferences.channelId, 0L)
     private val botApi = BotApi
     override suspend fun doWork(): Result {
+        try {
+            setForeground(
+                foregroundInfo = getForegroundInfo()
+            )
+        } catch (e: IllegalStateException) {
+            appContext.toastFromMainThread(e.localizedMessage)
+        }
         return withContext(Dispatchers.IO) {
-            try {
-                setForeground(
-                    foregroundInfo = getForegroundInfo()
-                )
-            } catch (e: IllegalStateException) {
-                appContext.toastFromMainThread(e.localizedMessage)
-            }
             val photoUriString = params.inputData.getString(KEY_PHOTO_URI)!!
             val photoUri = photoUriString.toUri()
             val isUploaded = DbHolder.database.photoDao().isUploaded(photoUri.lastPathSegment ?: "")

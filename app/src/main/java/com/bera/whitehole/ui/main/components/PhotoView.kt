@@ -112,7 +112,11 @@ fun PhotoView(
                 AsyncImage(
                     imageLoader = ImageLoaderModule.defaultImageLoader,
                     model = photo.pathUri,
-                    contentDescription = "photo"
+                    contentDescription = "photo",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .zoomImage(zoomState),
+                    contentScale = ContentScale.Fit,
                 )
             } else {
                 SubcomposeAsyncImage(
@@ -120,7 +124,9 @@ fun PhotoView(
                     model = photo.pathUri,
                     contentDescription = "photo",
                     contentScale = ContentScale.Fit,
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .zoomImage(zoomState),
                     error = {
                         SubcomposeAsyncImage(
                             imageLoader = ImageLoaderModule.remoteImageLoader,
@@ -130,7 +136,9 @@ fun PhotoView(
                                 .memoryCacheKey(photo.remoteId)
                                 .build(),
                             contentScale = ContentScale.Fit,
-                            modifier = Modifier.fillMaxSize(),
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .zoomImage(zoomState),
                             contentDescription = "photo",
                             loading = {
                                 Box(
