@@ -35,6 +35,7 @@ object WorkModule {
                     workDataOf(PeriodicPhotoBackupWorker.KEY_COMPRESSION_THRESHOLD to 1024 * 50L)
                 )
                 .setConstraints(constraints)
+                .setInitialDelay(Duration.ofDays(1))
                 .setBackoffCriteria(
                     backoffPolicy = BackoffPolicy.EXPONENTIAL,
                     duration = Duration.ofMinutes(20)
