@@ -20,8 +20,14 @@ interface PhotoDao {
     @Query("SELECT * FROM photos")
     fun getAllPhotosFlow(): Flow<List<Photo>>
 
+    @Query("SELECT * FROM photos ORDER BY localId DESC")
+    fun getAllPhotosSortedFlow(): Flow<List<Photo>>
+
     @Query("SELECT * FROM photos")
     fun getAllPhotosPaging(): PagingSource<Int, Photo>
+
+    @Query("SELECT * FROM photos ORDER BY localId DESC")
+    fun getAllPhotosSortedPaging(): PagingSource<Int, Photo>
 
     @Query("SELECT remoteId FROM photos")
     suspend fun getAllPhotoIds(): List<String>

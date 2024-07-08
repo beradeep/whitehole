@@ -1,5 +1,6 @@
 package com.bera.whitehole.ui.main.components
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -47,8 +48,10 @@ import com.bera.whitehole.utils.coil.ImageLoaderModule
 import com.bera.whitehole.workers.WorkModule
 import com.posthog.PostHog
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun PhotoView(
@@ -62,14 +65,14 @@ fun PhotoView(
     var photoUploadState by rememberSaveable { mutableStateOf(UploadState.NOT_UPLOADED) }
     LaunchedEffect(key1 = Unit) {
         if (isLocal) {
-            scope.launch(Dispatchers.IO) {
-                photoUploadState = UploadState.CHECKING
-                val isUploaded = DbHolder.database.photoDao().isUploaded(photo.localId!!)
-                photoUploadState = if (isUploaded == 0) {
-                    UploadState.NOT_UPLOADED
-                } else {
-                    UploadState.UPLOADED
-                }
+            photoUploadState = UploadState.CHECKING
+            val isUploaded = withContext(Dispatchers.IO) {
+                DbHolder.database.photoDao().isUploaded(photo.localId!!)
+            }
+            photoUploadState = if (isUploaded == 0) {
+                UploadState.NOT_UPLOADED
+            } else {
+                UploadState.UPLOADED
             }
         }
     }
@@ -192,7 +195,7 @@ fun PhotoView(
                         onClickUpload = {
                             PostHog.capture("upload-single")
                             WorkModule.instantUpload(photo.pathUri.toUri())
-                            scope.launch(Dispatchers.IO) {
+                            scope.launch {
                                 WorkModule.observeInstantWorkerById(photo.localId!!)
                                     .collectLatest {
                                         it.first().let { workInfo ->

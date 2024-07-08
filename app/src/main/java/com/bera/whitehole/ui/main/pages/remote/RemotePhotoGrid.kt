@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -50,10 +51,10 @@ fun RemotePhotoGrid(
             LoadAnimation(modifier = Modifier.align(Alignment.Center))
         } else {
             LazyVerticalGrid(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize().padding(2.dp),
                 columns = GridCells.Fixed(4),
-                verticalArrangement = Arrangement.spacedBy(1.dp),
-                horizontalArrangement = Arrangement.spacedBy(1.dp),
+                verticalArrangement = Arrangement.spacedBy(2.dp),
+                horizontalArrangement = Arrangement.spacedBy(2.dp),
             ) {
                 itemsPaging(
                     remotePhotos
@@ -88,11 +89,12 @@ fun RemotePhotoGrid(
                                     },
                                     error = {
                                         Icon(
-                                            tint = MaterialTheme.colorScheme.onSurface,
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                             imageVector = Icons.Rounded.CloudOff,
-                                            contentDescription = "error",
+                                            contentDescription = "load error",
                                             modifier = Modifier
-                                                .size(48.dp)
+                                                .align(Alignment.Center)
+                                                .size(20.dp)
                                                 .padding(16.dp)
                                         )
                                     }

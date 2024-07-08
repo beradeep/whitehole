@@ -87,10 +87,9 @@ object WorkModule {
         )
     }
 
-    fun observeInstantWorkerById(id: String) = flow<List<WorkInfo>> {
-        manager.getWorkInfosForUniqueWorkFlow("upload-id:$id")
+    fun observeInstantWorkerById(id: String) =
+        manager.getWorkInfosForUniqueWorkFlow("$UPLOADING_ID:$id")
             .flowOn(Dispatchers.IO)
-    }
 
     fun cancelPeriodicBackupWorker() {
         manager.cancelUniqueWork(PERIODIC_PHOTO_BACKUP_WORK)

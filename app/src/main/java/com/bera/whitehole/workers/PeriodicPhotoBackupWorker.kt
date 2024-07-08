@@ -78,8 +78,10 @@ class PeriodicPhotoBackupWorker(
             try {
                 imageList.fastForEach { uri ->
                     val uriString = uri.toString()
-                    val isUploaded =
-                        DbHolder.database.photoDao().isUploaded(uri.lastPathSegment ?: "")
+                    val localId = uri.lastPathSegment
+                    val isUploaded = localId?.let {
+                        DbHolder.database.photoDao().isUploaded(it)
+                    }
                     if (isUploaded == 0) {
                         try {
                             val mimeType = getMimeTypeFromUri(appContext.contentResolver, uri)

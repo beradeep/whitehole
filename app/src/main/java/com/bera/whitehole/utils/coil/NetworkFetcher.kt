@@ -22,7 +22,7 @@ class NetworkFetcher(
             val buffer = okio.Buffer().write(byteArray)
             SourceResult(
                 source = ImageSource(buffer, options.context),
-                mimeType = getMimeTypeFromExt(photo.photoType), // replace with your image's mime type
+                mimeType = getMimeTypeFromExt(photo.photoType),
                 dataSource = DataSource.NETWORK
             )
         } else {

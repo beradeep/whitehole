@@ -18,11 +18,7 @@ import kotlinx.coroutines.launch
 class LocalViewModel : ViewModel() {
     val localPhotosFlow: Flow<PagingData<PhotoModel.LocalPhotoModel>> by lazy {
         Pager(
-            config = PagingConfig(
-                pageSize = PAGE_SIZE,
-                prefetchDistance = PREFETCH_DISTANCE,
-                jumpThreshold = JUMP_THRESHOLD,
-            ),
+            config = PagingConfig(pageSize = PAGE_SIZE, jumpThreshold = JUMP_THRESHOLD,),
             pagingSourceFactory = { LocalPhotoSource }
         ).flow.cachedIn(viewModelScope)
     }
@@ -39,7 +35,6 @@ class LocalViewModel : ViewModel() {
 
     companion object {
         const val PAGE_SIZE = 32
-        const val PREFETCH_DISTANCE = 2 * 32
-        const val JUMP_THRESHOLD = 5 * 32
+        const val JUMP_THRESHOLD = 3 * 32
     }
 }

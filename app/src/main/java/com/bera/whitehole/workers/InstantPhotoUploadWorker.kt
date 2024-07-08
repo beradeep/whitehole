@@ -24,13 +24,6 @@ class InstantPhotoUploadWorker(
     private val channelId = Preferences.getLong(Preferences.channelId, 0L)
     private val botApi = BotApi
     override suspend fun doWork(): Result {
-        try {
-            setForeground(
-                foregroundInfo = getForegroundInfo()
-            )
-        } catch (e: IllegalStateException) {
-            appContext.toastFromMainThread(e.localizedMessage)
-        }
         return withContext(Dispatchers.IO) {
             val photoUriString = params.inputData.getString(KEY_PHOTO_URI)!!
             val photoUri = photoUriString.toUri()
@@ -48,14 +41,6 @@ class InstantPhotoUploadWorker(
                 Result.success()
             }
         }
-    }
-
-    override suspend fun getForegroundInfo(): ForegroundInfo {
-        return ForegroundInfo(
-            NOTIFICATION_ID,
-            makeStatusNotification("Uploading photo..", appContext),
-            FOREGROUND_SERVICE_TYPE_DATA_SYNC
-        )
     }
 
     companion object {

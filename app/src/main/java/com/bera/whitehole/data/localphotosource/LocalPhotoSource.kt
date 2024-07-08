@@ -24,23 +24,23 @@ object LocalPhotoSource : PagingSource<Int, PhotoModel.LocalPhotoModel>() {
         val limit = pageSize
         val offset = (page - 1) * pageSize
         val pagePhotoList = mutableListOf<PhotoModel.LocalPhotoModel>()
-        val query = Query.PhotoQuery().copy(
-            projection = arrayOf(
-                MediaStore.MediaColumns._ID,
-                MediaStore.MediaColumns.MIME_TYPE,
-                MediaStore.MediaColumns.DATE_MODIFIED,
-            ),
-            bundle = Query.PhotoQuery().bundle?.apply {
-                putInt(
-                    ContentResolver.QUERY_ARG_OFFSET,
-                    offset
-                )
-                putInt(
-                    ContentResolver.QUERY_ARG_LIMIT,
-                    limit
-                )
-            }
-        )
+        val query =
+            Query.PhotoQuery().copy(
+                bundle = Query.PhotoQuery().bundle?.apply {
+                    putString(
+                        ContentResolver.QUERY_ARG_SQL_SORT_ORDER,
+                        "${MediaStore.Images.ImageColumns.DATE_MODIFIED} DESC"
+                    )
+                    putInt(
+                        ContentResolver.QUERY_ARG_OFFSET,
+                        offset
+                    )
+                    putInt(
+                        ContentResolver.QUERY_ARG_LIMIT,
+                        limit
+                    )
+                }
+            )
         return try {
             withContext(Dispatchers.IO) {
                 val cursor = contentResolver.query(

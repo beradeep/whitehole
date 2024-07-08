@@ -12,15 +12,20 @@ import com.bera.whitehole.data.models.PhotoModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class RemoteViewModel: ViewModel() {
+class RemoteViewModel : ViewModel() {
     val remotePhotosFlow: Flow<PagingData<PhotoModel.RemotePhotoModel>> by lazy {
         Pager(
-            config = PagingConfig(pageSize = 32),
-            pagingSourceFactory = { DbHolder.database.photoDao().getAllPhotosPaging() }
-        ).flow.map {  pagingData ->
+            config = PagingConfig(pageSize = PAGE_SIZE, jumpThreshold = JUMP_THRESHOLD),
+            pagingSourceFactory = { DbHolder.database.photoDao().getAllPhotosSortedPaging() }
+        ).flow.map { pagingData ->
             pagingData.map {
                 it.toRemotePhotoModel()
             }
         }.cachedIn(viewModelScope)
+    }
+
+    companion object {
+        const val PAGE_SIZE = 32
+        const val JUMP_THRESHOLD = 3 * 32
     }
 }
