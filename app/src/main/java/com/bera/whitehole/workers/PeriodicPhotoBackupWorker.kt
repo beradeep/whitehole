@@ -47,6 +47,7 @@ class PeriodicPhotoBackupWorker(
             KEY_COMPRESSION_THRESHOLD,
             0L
         )
+        val imageCollection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
         val projection = arrayOf(
             MediaStore.Images.Media._ID,
             MediaStore.Images.Media.DISPLAY_NAME,
@@ -57,7 +58,7 @@ class PeriodicPhotoBackupWorker(
 
         return withContext(Dispatchers.IO) {
             val cursor = appContext.contentResolver.query(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                imageCollection,
                 projection,
                 null,
                 null,
