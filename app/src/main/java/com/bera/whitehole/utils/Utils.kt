@@ -96,17 +96,13 @@ suspend fun sendFileViaUri(
         val tempFile = File.createTempFile(Random.nextLong().toString(), fileExtension)
         val outputStream = FileOutputStream(tempFile)
         ipStream.copyTo(outputStream)
-        if (!mimeType.startsWith("image")) {
-            sendFileApi(
-                botApi,
-                channelId,
-                uri,
-                tempFile,
-                fileExtension!!
-            )
-        } else {
-            sendFileApi(botApi, channelId, uri, tempFile, fileExtension!!)
-        }
+        sendFileApi(
+            botApi,
+            channelId,
+            uri,
+            tempFile,
+            fileExtension!!
+        )
         outputStream.close()
         Log.d(ContentValues.TAG, tempFile.name)
         tempFile.deleteOnExit()
@@ -120,27 +116,25 @@ suspend fun sendFileApi(
     file: File,
     extension: String,
 ) {
-    withContext(Dispatchers.IO) {
-        botApi.sendFile(file, channelId).fold(
-            { response ->
-                Log.d("tag", "sendFile: success1")
-                response?.result?.document?.let { resFile ->
-                    val photo =
-                        Photo(
-                            pathUri.lastPathSegment ?: "",
-                            resFile.fileId,
-                            extension,
-                            pathUri.toString()
-                        )
-                    DbHolder.database.photoDao().upsertPhotos(photo)
-                    Log.d("tag", "sendFile: success")
-                    Log.d("tag", "sendFile: $photo")
-                } ?: {
-                    Log.d("tag", "sendFile: failed")
-                }
+    botApi.sendFile(file, channelId).fold(
+        { response ->
+            Log.d("tag", "sendFile: success1")
+            response?.result?.document?.let { resFile ->
+                val photo =
+                    Photo(
+                        pathUri.lastPathSegment ?: "",
+                        resFile.fileId,
+                        extension,
+                        pathUri.toString()
+                    )
+                DbHolder.database.photoDao().upsertPhotos(photo)
+                Log.d("tag", "sendFile: success")
+                Log.d("tag", "sendFile: $photo")
+            } ?: {
+                Log.d("tag", "sendFile: failed")
             }
-        )
-    }
+        }
+    )
     Log.d("tag", "sendFile: success3")
 }
 
