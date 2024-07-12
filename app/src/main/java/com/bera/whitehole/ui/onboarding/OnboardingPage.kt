@@ -86,16 +86,16 @@ fun OnboardingPage(
                             if (it) {
                                 Text(
                                     text = "Recommended to copy-paste only to avoid error.",
-                                    style = MaterialTheme.typography.labelSmall
+                                    style = MaterialTheme.typography.bodySmall
                                 )
                             } else {
                                 Text(
                                     text = "Token cannot be empty.",
-                                    style = MaterialTheme.typography.labelSmall
+                                    style = MaterialTheme.typography.bodySmall
                                 )
                             }
                         }
-                        Spacer(modifier = Modifier.height(6.dp))
+                        Spacer(modifier = Modifier.height(12.dp))
                     }
                 },
                 colors = TextFieldDefaults.colors().copy(
@@ -103,7 +103,6 @@ fun OnboardingPage(
                     unfocusedIndicatorColor = Color.Transparent,
                     errorIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,
-                    errorSupportingTextColor = MaterialTheme.colorScheme.error
                 ),
                 label = { Text(text = "Bot Token") },
                 singleLine = true,
@@ -155,7 +154,7 @@ fun OnboardingPage(
                 title = { Text(text = "Getting Started") },
                 text = {
                     Column {
-                        Text(text = "1. Visit BotFather on telegram")
+                        Text(text = "1. Visit BotFather on Telegram.")
                         Text(text = "2. Create a new bot.")
                         Text(text = "3. Get the bot token from BotFather.")
                         Text(text = "4. Paste the token here.")

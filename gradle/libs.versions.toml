@@ -3,7 +3,6 @@ contentpager = "1.0.0"
 kotlin = "1.9.24"
 converterJackson = "2.11.0"
 androidGradlePlugin = "8.4.2"
-accompanistPermissions = "0.29.0-alpha"
 activityCompose = "1.9.0"
 animation = "1.7.0-beta03"
 coilCompose = "2.6.0"
@@ -31,7 +30,6 @@ workRuntime = "2.9.0"
 
 
 [libraries]
-accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 androidx-animation = { module = "androidx.compose.animation:animation", version.ref = "animation" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }

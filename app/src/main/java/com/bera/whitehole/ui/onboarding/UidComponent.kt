@@ -94,7 +94,7 @@ fun UidComponent(
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surface),
+                .background(MaterialTheme.colorScheme.background),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -111,9 +111,9 @@ fun UidComponent(
                         Column {
                             Text(
                                 text = "Invalid UID or token.",
-                                style = MaterialTheme.typography.labelSmall
+                                style = MaterialTheme.typography.bodySmall
                             )
-                            Spacer(modifier = Modifier.height(6.dp))
+                            Spacer(modifier = Modifier.height(12.dp))
                         }
                     }
                 },
@@ -122,7 +122,6 @@ fun UidComponent(
                     unfocusedIndicatorColor = Color.Transparent,
                     errorIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,
-                    errorSupportingTextColor = MaterialTheme.colorScheme.error
                 ),
                 label = { Text(text = "Unique ID (/start in gc)") },
                 singleLine = true,
