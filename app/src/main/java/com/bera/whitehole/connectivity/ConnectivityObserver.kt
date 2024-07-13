@@ -3,9 +3,6 @@ package com.bera.whitehole.connectivity
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
-import androidx.room.Room
-import com.bera.whitehole.data.localdb.Database
-import com.bera.whitehole.data.localdb.DbHolder
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow

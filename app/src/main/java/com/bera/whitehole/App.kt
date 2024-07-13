@@ -7,10 +7,9 @@ import com.bera.whitehole.api.BotApi
 import com.bera.whitehole.connectivity.ConnectivityObserver
 import com.bera.whitehole.data.localdb.DbHolder
 import com.bera.whitehole.data.localdb.Preferences
-import com.bera.whitehole.utils.coil.ImageLoaderModule
 import com.bera.whitehole.data.localphotosource.LocalPhotoSource
+import com.bera.whitehole.utils.coil.ImageLoaderModule
 import com.bera.whitehole.workers.WorkModule
-import com.posthog.android.BuildConfig
 import com.posthog.android.PostHogAndroid
 import com.posthog.android.PostHogAndroidConfig
 

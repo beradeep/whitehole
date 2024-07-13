@@ -10,10 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,7 +28,6 @@ import com.bera.whitehole.ui.components.LoadAnimation
 import com.bera.whitehole.ui.components.PhotoPageView
 import com.bera.whitehole.ui.components.itemsPaging
 import com.bera.whitehole.utils.coil.ImageLoaderModule
-import kotlinx.coroutines.delay
 
 @Composable
 fun LocalPhotoGrid(

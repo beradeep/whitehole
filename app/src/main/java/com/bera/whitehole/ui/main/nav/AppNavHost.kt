@@ -1,8 +1,6 @@
 package com.bera.whitehole.ui.main.nav
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -12,7 +10,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.bera.whitehole.ui.components.ConnectivityStatusPopup
 import com.bera.whitehole.ui.main.pages.local.LocalPhotoGrid
 import com.bera.whitehole.ui.main.pages.local.LocalViewModel
 import com.bera.whitehole.ui.main.pages.remote.RemotePhotoGrid
