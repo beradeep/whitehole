@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,11 +20,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.bera.whitehole.R
 import com.bera.whitehole.data.localdb.Preferences
 import com.bera.whitehole.data.localdb.backup.BackupHelper
+import com.bera.whitehole.utils.toastFromMainThread
 import com.bera.whitehole.workers.WorkModule
 import com.posthog.PostHog
 import kotlinx.coroutines.Dispatchers
@@ -51,16 +53,28 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
         )
     }
     LaunchedEffect(key1 = isAutoPhotoBackupEnabled, Dispatchers.IO) {
-        Preferences.edit { putBoolean(Preferences.isPeriodicPhotoBackupEnabeld, isAutoPhotoBackupEnabled) }
+        Preferences.edit {
+            putBoolean(
+                Preferences.isPeriodicPhotoBackupEnabeld,
+                isAutoPhotoBackupEnabled
+            )
+        }
     }
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(horizontal = 8.dp)
     ) {
         item {
-            Text(text = "Backup", style = MaterialTheme.typography.titleMedium)
-            Spacer(modifier = Modifier.height(6.dp))
+            Text(
+                text = "Backup",
+                fontSize = 18.sp,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.secondary,
+                modifier = Modifier.padding(start = 2.dp)
+            )
+            HorizontalDivider()
+            Spacer(modifier = Modifier.height(10.dp))
             SettingsSwitchCard(
                 text = "Auto periodic backup",
                 icon = painterResource(id = R.drawable.cloud_arrow_up_solid),
@@ -70,10 +84,15 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
                 if (isAutoPhotoBackupEnabled) {
                     WorkModule.backupPeriodic()
                     PostHog.capture(event = "enabled-periodic-backup")
-                }
-                else {
+                    scope.launch {
+                        context.toastFromMainThread("Periodic backup enabled.")
+                    }
+                } else {
                     WorkModule.cancelPeriodicBackupWorker()
                     PostHog.capture(event = "disabled-periodic-backup")
+                    scope.launch {
+                        context.toastFromMainThread("Periodic backup cancelled.")
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(6.dp))
@@ -81,14 +100,18 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
                 settingHeaderText = "Restore all from cloud",
                 painterResourceID = R.drawable.cloud_arrow_down_solid
             ) {
-                PostHog.capture(event = "export-db")
+                PostHog.capture("restore-all")
                 WorkModule.restoreAll()
+                scope.launch {
+                    context.toastFromMainThread("Restoring task enqueued in the background.")
+                }
             }
             Spacer(modifier = Modifier.height(6.dp))
             SettingsCard(
                 settingHeaderText = "Export backup database",
                 painterResourceID = R.drawable.file_export_solid
             ) {
+                PostHog.capture(event = "export-db")
                 createPhotosBackupFile.launch("whitehole_photos_backup.json")
             }
             Spacer(modifier = Modifier.height(6.dp))

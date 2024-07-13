@@ -1,4 +1,4 @@
-package com.bera.whitehole.ui.main.components
+package com.bera.whitehole.ui.components
 
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
@@ -200,11 +200,11 @@ fun PhotoView(
                                     .collectLatest {
                                         it.first().let { workInfo ->
                                             photoUploadState = when (workInfo.state) {
-                                                WorkInfo.State.ENQUEUED -> UploadState.UPLOADING
+                                                WorkInfo.State.ENQUEUED -> UploadState.ENQUEUED
                                                 WorkInfo.State.RUNNING -> UploadState.UPLOADING
                                                 WorkInfo.State.SUCCEEDED -> UploadState.UPLOADED
                                                 WorkInfo.State.FAILED -> UploadState.FAILED
-                                                WorkInfo.State.BLOCKED -> UploadState.FAILED
+                                                WorkInfo.State.BLOCKED -> UploadState.BLOCKED
                                                 WorkInfo.State.CANCELLED -> UploadState.FAILED
                                             }
                                         }

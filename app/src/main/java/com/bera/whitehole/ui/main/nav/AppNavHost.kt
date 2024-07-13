@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.bera.whitehole.ui.components.ConnectivityStatusPopup
 import com.bera.whitehole.ui.main.pages.local.LocalPhotoGrid
 import com.bera.whitehole.ui.main.pages.local.LocalViewModel
 import com.bera.whitehole.ui.main.pages.remote.RemotePhotoGrid

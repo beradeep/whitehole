@@ -1,4 +1,4 @@
-package com.bera.whitehole.ui.main.components
+package com.bera.whitehole.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,6 +9,7 @@ import androidx.compose.material.icons.rounded.CloudDone
 import androidx.compose.material.icons.rounded.CloudOff
 import androidx.compose.material.icons.rounded.CloudSync
 import androidx.compose.material.icons.rounded.CloudUpload
+import androidx.compose.material.icons.rounded.Timer
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -63,10 +64,25 @@ fun FloatingBottomBar(
 
                 UploadState.FAILED -> TextIcon(
                     imageVector = Icons.Rounded.CloudOff,
-                    title = "Backup failed",
+                    title = "Upload failed",
                     color = contentColor,
                     isEnabled = true,
                     onItemClick = onClickUpload
+                )
+
+                UploadState.ENQUEUED -> TextIcon(
+                    imageVector = Icons.Rounded.Timer,
+                    title = "Upload enqueued",
+                    color = contentColor,
+                    isEnabled = true,
+                    onItemClick = onClickUpload
+                )
+
+                UploadState.BLOCKED -> TextIcon(
+                    imageVector = Icons.Rounded.CloudOff,
+                    title = "Upload blocked",
+                    color = contentColor,
+                    isEnabled = false
                 )
             }
         }

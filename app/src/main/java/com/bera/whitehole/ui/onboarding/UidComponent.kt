@@ -140,11 +140,12 @@ fun UidComponent(
                     scope.launch {
                         val id = inputIdState.toLongOrNull()
                         if (id != null) {
-                            if (botApi.getChat(ChatId.fromId(id))) {
-                                Preferences.edit {
-                                    putLong(Preferences.channelId, id)
-                                }
+                            if (botApi.getChat(ChatId.fromId(id)) && botApi.chatId == id) {
+                                // verification successful
+                                Preferences.edit { putLong(Preferences.channelId, id) }
                                 PostHog.identify(id.toString())
+
+                                // navigate to main screen
                                 onNavigate()
                             } else {
                                 isValidInput = false

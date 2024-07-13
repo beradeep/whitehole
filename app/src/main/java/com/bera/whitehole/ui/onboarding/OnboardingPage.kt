@@ -2,7 +2,6 @@ package com.bera.whitehole.ui.onboarding
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,6 +21,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,7 +34,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,7 +42,11 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.bera.whitehole.R
 import com.bera.whitehole.api.BotApi
+import com.bera.whitehole.connectivity.ConnectivityObserver
+import com.bera.whitehole.connectivity.ConnectivityStatus
 import com.bera.whitehole.data.localdb.Preferences
+import com.bera.whitehole.ui.components.NoInternetScreen
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Preview
@@ -50,6 +54,40 @@ import kotlinx.coroutines.launch
 fun OnboardingPage(
     modifier: Modifier = Modifier,
     botApi: BotApi = BotApi,
+    navController: NavController = rememberNavController()
+) {
+
+    val connectivityObserver = remember { ConnectivityObserver }
+    val connection by connectivityObserver.observe()
+        .collectAsState(initial = ConnectivityStatus.Unavailable)
+    val isConnected = connection === ConnectivityStatus.Available
+
+    var visibility by remember { mutableStateOf(false) }
+
+    AnimatedContent(
+        targetState = visibility, label = "onboarding_visibility",
+    ) {
+        if (it) {
+            NoInternetScreen(isConnected = isConnected)
+        } else {
+            Onboarding(modifier = Modifier.fillMaxSize(), navController = navController)
+        }
+    }
+
+    LaunchedEffect(isConnected) {
+        if (!isConnected) {
+            delay(500)
+            visibility = true
+        } else {
+            delay(2000)
+            visibility = false
+        }
+    }
+}
+
+@Composable
+fun Onboarding(
+    modifier: Modifier = Modifier, botApi: BotApi = BotApi,
     navController: NavController = rememberNavController()
 ) {
     val scope = rememberCoroutineScope()
@@ -85,7 +123,7 @@ fun OnboardingPage(
                         AnimatedContent(targetState = isValidToken, label = "SupportText") {
                             if (it) {
                                 Text(
-                                    text = "Recommended to copy-paste only to avoid error.",
+                                    text = "Recommended to only copy-paste to avoid error.",
                                     style = MaterialTheme.typography.bodySmall
                                 )
                             } else {

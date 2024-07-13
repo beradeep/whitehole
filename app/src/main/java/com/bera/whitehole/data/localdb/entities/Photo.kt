@@ -6,6 +6,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.bera.whitehole.data.models.PhotoModel
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
 import kotlinx.parcelize.Parcelize
 
 @Keep
@@ -23,5 +25,16 @@ data class Photo(
             type = this.photoType,
             uri = this.pathUri
         )
+    }
+
+    companion object {
+        @JvmStatic
+        @JsonCreator
+        fun create(
+            @JsonProperty("localId") localId: String,
+            @JsonProperty("remoteId") remoteId: String,
+            @JsonProperty("photoType") photoType: String,
+            @JsonProperty("pathUri") pathUri: String
+        ): Photo = Photo(localId, remoteId, photoType, pathUri)
     }
 }

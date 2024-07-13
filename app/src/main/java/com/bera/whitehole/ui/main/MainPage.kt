@@ -1,6 +1,7 @@
 package com.bera.whitehole.ui.main
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -20,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
 import com.bera.whitehole.data.localdb.Preferences
+import com.bera.whitehole.ui.components.ConnectivityStatusPopup
 import com.bera.whitehole.ui.main.nav.AppNavHost
 import com.bera.whitehole.ui.main.nav.NavDrawer
 import com.bera.whitehole.ui.main.nav.Screens
@@ -64,27 +66,30 @@ fun MainPage(
         ) {
             Scaffold(
                 topBar = {
-                    TopAppBar(
-                        title = {
-                            Text(
-                                viewModel.currentDestination.displayTitle
-                            )
-                        },
-                        navigationIcon = {
-                            IconButton(
-                                onClick = {
-                                    scope.launch {
-                                        drawerState.open()
-                                    }
-                                }
-                            ) {
-                                Icon(
-                                    Icons.Default.Menu,
-                                    null
+                    Column {
+                        TopAppBar(
+                            title = {
+                                Text(
+                                    viewModel.currentDestination.displayTitle
                                 )
+                            },
+                            navigationIcon = {
+                                IconButton(
+                                    onClick = {
+                                        scope.launch {
+                                            drawerState.open()
+                                        }
+                                    }
+                                ) {
+                                    Icon(
+                                        Icons.Default.Menu,
+                                        null
+                                    )
+                                }
                             }
-                        }
-                    )
+                        )
+                        ConnectivityStatusPopup()
+                    }
                 }
             ) {
                 AppNavHost(

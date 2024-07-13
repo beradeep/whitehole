@@ -96,9 +96,9 @@ class PeriodicPhotoBackupWorker(
                             do {
                                 val outputStream = ByteArrayOutputStream()
                                 val compressFormat = when (mimeType) {
-                                    "image/jpeg" -> Bitmap.CompressFormat.JPEG
-                                    "image/png" -> Bitmap.CompressFormat.PNG
-                                    "image/webp" -> Bitmap.CompressFormat.WEBP_LOSSY
+                                    MIME_TYPE_JPEG -> Bitmap.CompressFormat.JPEG
+                                    MIME_TYPE_PNG -> Bitmap.CompressFormat.PNG
+                                    MIME_TYPE_WEBP -> Bitmap.CompressFormat.WEBP
                                     else -> Bitmap.CompressFormat.JPEG
                                 }
                                 outputStream.use {
@@ -140,9 +140,9 @@ class PeriodicPhotoBackupWorker(
     }
 
     companion object {
-        const val KEY_EXTENSION = "KEY_EXTENSION"
-        const val KEY_CONTENT_URI = "KEY_CONTENT_URI"
-        const val KEY_FILE_NAME = "KEY_FILE_NAME"
+        const val MIME_TYPE_JPEG = "image/jpeg"
+        const val MIME_TYPE_PNG = "image/png"
+        const val MIME_TYPE_WEBP = "image/webp"
         const val KEY_COMPRESSION_THRESHOLD = "KEY_COMPRESSION_THRESHOLD"
         const val KEY_RESULT_ERROR = "KEY_RESULT_ERROR"
     }

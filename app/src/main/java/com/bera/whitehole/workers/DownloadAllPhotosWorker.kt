@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.pm.ServiceInfo
 import android.provider.MediaStore
+import android.util.Log
 import androidx.compose.ui.util.fastForEach
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
@@ -67,7 +68,7 @@ class DownloadAllPhotosWorker(
             }
             return Result.success()
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.d("Download All Photos", "doWork: ${e.localizedMessage}")
             context.toastFromMainThread(e.localizedMessage)
             return Result.failure()
         }

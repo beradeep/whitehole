@@ -26,9 +26,9 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import coil.compose.AsyncImage
 import com.bera.whitehole.data.models.PhotoModel
-import com.bera.whitehole.ui.main.components.LoadAnimation
-import com.bera.whitehole.ui.main.components.PhotoPageView
-import com.bera.whitehole.ui.main.components.itemsPaging
+import com.bera.whitehole.ui.components.LoadAnimation
+import com.bera.whitehole.ui.components.PhotoPageView
+import com.bera.whitehole.ui.components.itemsPaging
 import com.bera.whitehole.utils.coil.ImageLoaderModule
 import kotlinx.coroutines.delay
 

@@ -1,4 +1,4 @@
-package com.bera.whitehole.ui.main.components
+package com.bera.whitehole.ui.components
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager

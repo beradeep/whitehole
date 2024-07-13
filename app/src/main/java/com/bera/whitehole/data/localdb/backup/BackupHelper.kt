@@ -2,6 +2,7 @@ package com.bera.whitehole.data.localdb.backup
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import com.bera.whitehole.data.localdb.DbHolder
 import com.bera.whitehole.utils.toastFromMainThread
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -20,7 +21,7 @@ object BackupHelper {
                 val favoritesJson = mapper.writeValueAsBytes(backupFile)
                 it.write(favoritesJson)
             }
-            context.toastFromMainThread("Backup Success")
+            context.toastFromMainThread("Export Success")
         } catch (e: Exception) {
             context.toastFromMainThread(e.localizedMessage)
         }
@@ -34,6 +35,7 @@ object BackupHelper {
             }
             context.toastFromMainThread("Import Success")
         } catch (e: Exception) {
+            Log.d("Download All Photos", "doWork: ${e.localizedMessage}")
             context.toastFromMainThread(e.localizedMessage)
         }
     }

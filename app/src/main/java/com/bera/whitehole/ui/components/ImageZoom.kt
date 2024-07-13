@@ -1,4 +1,4 @@
-package com.bera.whitehole.ui.main.components
+package com.bera.whitehole.ui.components
 
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown

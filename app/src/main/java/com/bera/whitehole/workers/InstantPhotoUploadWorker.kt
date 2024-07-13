@@ -43,6 +43,13 @@ class InstantPhotoUploadWorker(
         }
     }
 
+    override suspend fun getForegroundInfo(): ForegroundInfo {
+        return createForegroundInfo(
+            NOTIFICATION_ID,
+            makeStatusNotification("Uploading photo...", appContext)
+        )
+    }
+
     companion object {
         const val KEY_PHOTO_URI = "photoUri"
     }

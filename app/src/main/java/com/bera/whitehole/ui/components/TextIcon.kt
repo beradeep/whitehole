@@ -1,4 +1,4 @@
-package com.bera.whitehole.ui.main.components
+package com.bera.whitehole.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

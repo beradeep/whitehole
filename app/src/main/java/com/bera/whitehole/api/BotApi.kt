@@ -11,6 +11,9 @@ import com.github.kotlintelegrambot.entities.Message
 import com.github.kotlintelegrambot.entities.TelegramFile
 import com.github.kotlintelegrambot.network.Response
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
 import java.io.File
 
@@ -20,6 +23,8 @@ import java.io.File
  */
 object BotApi {
     private lateinit var bot: Bot
+    var chatId: Long? = null
+
     fun create() {
         bot = bot {
             token = Preferences.getString(
@@ -28,11 +33,13 @@ object BotApi {
             )
             dispatch {
                 command("start") {
-                    val chatId = message.chat.id
-                    val result = bot.sendMessage(
-                        chatId = ChatId.fromId(chatId),
-                        text = chatId.toString()
-                    )
+                    chatId = message.chat.id
+                    chatId?.let {
+                        val result = bot.sendMessage(
+                            chatId = ChatId.fromId(it),
+                            text = chatId.toString()
+                        )
+                    }
                 }
             }
         }
@@ -40,6 +47,10 @@ object BotApi {
 
     fun startPolling() {
         bot.startPolling()
+    }
+
+    fun stopPolling() {
+        bot.stopPolling()
     }
 
     suspend fun getChat(chatId: ChatId): Boolean {
