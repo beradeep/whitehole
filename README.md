@@ -35,11 +35,8 @@
 
 <!-- ---------- Download ---------- -->
 ## Download
-<div align="start">   
   
-  [<img src="https://raw.githubusercontent.com/vadret/android/master/assets/get-github.png" alt="Get it on GitHub" height="80">](https://github.com/beradeep/whitehole/releases)
-  
-</div>
+<a href="https://github.com/beradeep/whitehole/releases"><img alt="Get it on GitHub" src="https://user-images.githubusercontent.com/69304392/148696068-0cfea65d-b18f-4685-82b5-329a330b1c0d.png" height=80px /><a href="https://apt.izzysoft.de/fdroid/index/apk/com.bera.whitehole"><img alt="Get it on izzy" src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" height=80px />
 
 <!-- ---------- Usage ---------- -->
 ## Getting Started
