@@ -1,6 +1,6 @@
 <!-- ---------- Header ---------- -->
 <div align="center">
-  <img width="200" height="200"src="app/src/main/ic_launcher-playstore.png">
+  <img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp">
   <h1>Whitehole</h1>
 <p>Create a self-owned photo backup space on Telegram.</p>
 
@@ -57,10 +57,10 @@
 ## Screenshots
 
 <div style="display: flex;">
-  <img src="https://github.com/beradeep/whitehole/blob/master/screenshots/Screenshot_20240619_124755.png" width=24%>
-  <img src="https://github.com/beradeep/whitehole/blob/master/screenshots/Screenshot_20240619_125053.png" width=24%>
-  <img src="https://github.com/beradeep/whitehole/blob/master/screenshots/Screenshot_20240619_125113.png" width=24%>
-  <img src="https://github.com/beradeep/whitehole/blob/master/screenshots/Screenshot_20240619_125140.png" width=24%>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/Screenshot_20240619_124755.png" width=24%>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/Screenshot_20240619_125053.png" width=24%>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/Screenshot_20240619_125113.png" width=24%>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/Screenshot_20240619_125140.png" width=24%>
 
 </div>
 
