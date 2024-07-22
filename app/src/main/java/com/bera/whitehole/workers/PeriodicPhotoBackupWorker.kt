@@ -1,17 +1,16 @@
 package com.bera.whitehole.workers
 
-import android.content.ContentUris
 import android.content.Context
 import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
-import android.provider.MediaStore
 import androidx.compose.ui.util.fastForEach
+import androidx.core.net.toUri
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
+import com.bera.whitehole.R
 import com.bera.whitehole.api.BotApi
 import com.bera.whitehole.data.localdb.DbHolder
 import com.bera.whitehole.data.localdb.Preferences
@@ -20,13 +19,13 @@ import com.bera.whitehole.utils.getMimeTypeFromUri
 import com.bera.whitehole.utils.sendFileApi
 import com.bera.whitehole.utils.toastFromMainThread
 import com.bera.whitehole.workers.WorkModule.NOTIFICATION_ID
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 import kotlin.math.roundToInt
 import kotlin.random.Random
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class PeriodicPhotoBackupWorker(
     private val appContext: Context,
@@ -47,79 +46,47 @@ class PeriodicPhotoBackupWorker(
             KEY_COMPRESSION_THRESHOLD,
             0L
         )
-        val imageCollection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
-        val projection = arrayOf(
-            MediaStore.Images.Media._ID,
-            MediaStore.Images.Media.DISPLAY_NAME,
-            MediaStore.Images.Media.DATE_ADDED
-        )
-        val imageList = mutableListOf<Uri>()
-        val sortOrder = "${MediaStore.Images.Media.DATE_ADDED} DESC"
-
+        val imageList = DbHolder.database.photoDao().getAllNotUploaded()
         return withContext(Dispatchers.IO) {
-            val cursor = appContext.contentResolver.query(
-                imageCollection,
-                projection,
-                null,
-                null,
-                sortOrder
-            )
-            cursor?.use {
-                val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
-                while (cursor.moveToNext()) {
-                    val id = cursor.getLong(idColumn)
-                    val contentUri = ContentUris.withAppendedId(
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        id
-                    )
-                    imageList.add(contentUri)
-                }
-            }
             lateinit var tempFile: File
             try {
-                imageList.fastForEach { uri ->
-                    val uriString = uri.toString()
-                    val localId = uri.lastPathSegment
-                    val isUploaded = localId?.let {
-                        DbHolder.database.photoDao().isUploaded(it)
-                    }
-                    if (isUploaded == 0) {
-                        try {
-                            val mimeType = getMimeTypeFromUri(appContext.contentResolver, uri)
-                            val ext = getExtFromMimeType(mimeType!!)
-                            val bytes = appContext.contentResolver.openInputStream(uri)?.use {
-                                it.readBytes()
-                            } ?: return@withContext Result.failure()
-                            val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                            var outputBytes: ByteArray
-                            var quality = 100
-                            do {
-                                val outputStream = ByteArrayOutputStream()
-                                val compressFormat = when (mimeType) {
-                                    MIME_TYPE_JPEG -> Bitmap.CompressFormat.JPEG
-                                    MIME_TYPE_PNG -> Bitmap.CompressFormat.PNG
-                                    MIME_TYPE_WEBP -> Bitmap.CompressFormat.WEBP
-                                    else -> Bitmap.CompressFormat.JPEG
-                                }
-                                outputStream.use {
-                                    bitmap.compress(compressFormat, quality, it)
-                                    outputBytes = it.toByteArray()
-                                    quality -= (quality * 0.1).roundToInt()
-                                }
-                            } while (outputBytes.size > compressionThresholdInBytes && quality > 25)
-                            tempFile = File.createTempFile(
-                                "${Random.nextLong()}",
-                                ext
-                            )
-                            tempFile.writeBytes(outputBytes)
-                            sendFileApi(botApi, channelId, uri, tempFile, ext!!)
-                        } catch (e: IOException) {
-                            return@withContext Result.failure(
-                                workDataOf(KEY_RESULT_ERROR to "${e.message}")
-                            )
-                        } finally {
-                            tempFile.deleteOnExit()
-                        }
+                imageList.fastForEach { photo ->
+                    val uri = photo.pathUri.toUri()
+                    try {
+                        val mimeType = getMimeTypeFromUri(appContext.contentResolver, uri)
+                        val ext = getExtFromMimeType(mimeType!!)
+                        val bytes = appContext.contentResolver.openInputStream(uri)?.use {
+                            it.readBytes()
+                        } ?: return@withContext Result.failure()
+                        val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                        var outputBytes: ByteArray
+                        var quality = 100
+                        do {
+                            val outputStream = ByteArrayOutputStream()
+                            val compressFormat = when (mimeType) {
+                                MIME_TYPE_JPEG -> Bitmap.CompressFormat.JPEG
+                                MIME_TYPE_PNG -> Bitmap.CompressFormat.PNG
+                                MIME_TYPE_WEBP -> Bitmap.CompressFormat.WEBP
+                                else -> Bitmap.CompressFormat.JPEG
+                            }
+                            outputStream.use {
+                                bitmap.compress(compressFormat, quality, it)
+                                outputBytes = it.toByteArray()
+                                quality -= (quality * 0.1).roundToInt()
+                            }
+                        } while (outputBytes.size > compressionThresholdInBytes && quality > 25)
+                        tempFile = File.createTempFile(
+                            "${Random.nextLong()}",
+                            ext
+                        )
+                        tempFile.writeBytes(outputBytes)
+                        sendFileApi(botApi, channelId, uri, tempFile, ext!!)
+                    } catch (e: IOException) {
+                        return@withContext Result.failure(
+                            workDataOf(KEY_RESULT_ERROR to "${e.message}")
+                        )
+                    } finally {
+                        tempFile.deleteOnExit()
                     }
                 }
                 Result.success()
@@ -134,7 +101,7 @@ class PeriodicPhotoBackupWorker(
     override suspend fun getForegroundInfo(): ForegroundInfo {
         return ForegroundInfo(
             NOTIFICATION_ID,
-            makeStatusNotification("Backing up photos..", appContext),
+            makeStatusNotification(appContext.getString(R.string.backing_up_photos), appContext),
             FOREGROUND_SERVICE_TYPE_DATA_SYNC
         )
     }

@@ -14,6 +14,7 @@ junit = "4.13.2"
 junitVersion = "1.1.5"
 kotlinxCoroutinesAndroid = "1.8.0"
 kotlinxCoroutinesCore = "1.6.2"
+leakcanaryAndroid = "2.14"
 lifecycleRuntimeKtx = "2.8.2"
 materialIconsExtended = "1.6.8"
 navigationCompose = "2.8.0-beta03"
@@ -27,6 +28,7 @@ ui = "1.7.0-beta03"
 adaptiveNavigationSuite = "1.0.0-alpha07"
 material3-adaptive = "1.0.0-beta03"
 workRuntime = "2.9.0"
+ktlint = "12.1.1"
 
 
 [libraries]
@@ -65,6 +67,7 @@ junit = { module = "junit:junit", version.ref = "junit" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutinesAndroid" }
+leakcanary-android = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanaryAndroid" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 posthog-android = { module = "com.posthog:posthog-android", version.ref = "posthogAndroid" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
@@ -74,3 +77,4 @@ telegram = { module = "io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegra
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }

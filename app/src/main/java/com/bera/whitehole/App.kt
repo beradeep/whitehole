@@ -4,11 +4,10 @@ import android.app.Application
 import com.bera.whitehole.BuildConfig.POSTHOG_API_KEY
 import com.bera.whitehole.BuildConfig.POSTHOG_HOST
 import com.bera.whitehole.api.BotApi
-import com.bera.whitehole.connectivity.ConnectivityObserver
 import com.bera.whitehole.data.localdb.DbHolder
 import com.bera.whitehole.data.localdb.Preferences
-import com.bera.whitehole.data.localphotosource.LocalPhotoSource
 import com.bera.whitehole.utils.coil.ImageLoaderModule
+import com.bera.whitehole.utils.connectivity.ConnectivityObserver
 import com.bera.whitehole.workers.WorkModule
 import com.posthog.android.PostHogAndroid
 import com.posthog.android.PostHogAndroidConfig
@@ -22,7 +21,6 @@ class App : Application() {
         DbHolder.create(applicationContext)
         WorkModule.create(applicationContext)
         ImageLoaderModule.create(applicationContext)
-        LocalPhotoSource.create(applicationContext)
         ConnectivityObserver.init(applicationContext)
         BotApi.create()
 

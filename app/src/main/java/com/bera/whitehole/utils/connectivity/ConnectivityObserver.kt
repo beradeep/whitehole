@@ -1,4 +1,4 @@
-package com.bera.whitehole.connectivity
+package com.bera.whitehole.utils.connectivity
 
 import android.content.Context
 import android.net.ConnectivityManager

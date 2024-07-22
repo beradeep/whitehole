@@ -1,1 +1,1 @@
-<p><i>Whitehole</i> allows you to use a Telegram group as a cloud storage solution to backup your photos.</p><p><br><b>Features:</b></><ul><li>Self control of data</li><li>No storage limit (as per Telegram's limits)</li><li>Periodic auto backup</li></ul>
+<p><i>Whitehole</i> allows you to use a Telegram group as a space to manage your photos.</p><p><br><b>Features:</b></><ul><li>Create and control backups</li><li>Complete customizability</li><li>Automatic periodic sync</li><li>Material Design 3 (You)</li><li>Entirely Open Source</li></ul>

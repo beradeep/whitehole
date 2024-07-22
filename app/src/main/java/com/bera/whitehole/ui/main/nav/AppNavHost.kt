@@ -1,15 +1,18 @@
 package com.bera.whitehole.ui.main.nav
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.bera.whitehole.ui.main.pages.about.AboutScreen
 import com.bera.whitehole.ui.main.pages.local.LocalPhotoGrid
 import com.bera.whitehole.ui.main.pages.local.LocalViewModel
 import com.bera.whitehole.ui.main.pages.remote.RemotePhotoGrid
@@ -20,7 +23,7 @@ import com.bera.whitehole.ui.main.pages.settings.SettingsScreen
 fun AppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = Screens.LocalPhotos.route
+    startDestination: String = Screens.LocalPhotos.route,
 ) {
     NavHost(
         modifier = modifier,
@@ -28,21 +31,38 @@ fun AppNavHost(
         startDestination = startDestination
     ) {
         composable(
-            route = Screens.LocalPhotos.route,
+            route = Screens.LocalPhotos.route
         ) {
             val viewModel: LocalViewModel = screenScopedViewModel()
             val localPhotos = viewModel.localPhotosFlow.collectAsLazyPagingItems()
-            LocalPhotoGrid(localPhotos = localPhotos)
+            val localPhotosCount by viewModel.localPhotosCount.collectAsStateWithLifecycle(0)
+            LocalPhotoGrid(localPhotos = localPhotos, totalCount = localPhotosCount)
         }
         composable(
-            route = Screens.RemotePhotos.route,
+            route = Screens.RemotePhotos.route
         ) {
             val viewModel: RemoteViewModel = screenScopedViewModel()
-            val remotePhotos = viewModel.remotePhotosFlow.collectAsLazyPagingItems()
-            RemotePhotoGrid(remotePhotos = remotePhotos)
+            val remotePhotosOnDevice = viewModel.remotePhotosOnDeviceFlow.collectAsLazyPagingItems()
+            val remotePhotosNotOnDevice =
+                viewModel.remotePhotosNotOnDeviceFlow.collectAsLazyPagingItems()
+            val remotePhotosOnDeviceCount by viewModel.remotePhotosOnDeviceCount.collectAsStateWithLifecycle(
+                0
+            )
+            val remotePhotosNotOnDeviceCount by viewModel.remotePhotosNotOnDeviceCount.collectAsStateWithLifecycle(
+                0
+            )
+            RemotePhotoGrid(
+                remotePhotosOnDevice,
+                remotePhotosNotOnDevice,
+                remotePhotosOnDeviceCount,
+                remotePhotosNotOnDeviceCount
+            )
         }
         composable(route = Screens.Settings.route) {
             SettingsScreen()
+        }
+        composable(route = Screens.About.route) {
+            AboutScreen()
         }
     }
 }
@@ -54,7 +74,7 @@ fun AppNavHost(
  */
 @Composable
 inline fun <reified T : ViewModel> screenScopedViewModel(
-    factory: ViewModelProvider.Factory? = null
+    factory: ViewModelProvider.Factory? = null,
 ): T {
     val viewModelStoreOwner = LocalViewModelStoreOwner.current
     requireNotNull(viewModelStoreOwner) { "No ViewModelStoreOwner provided" }

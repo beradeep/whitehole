@@ -50,7 +50,8 @@ fun Modifier.zoomArea(state: ZoomState): Modifier = this.then(
                 }
             } while (event.changes.any { it.pressed })
         }
-    })
+    }
+)
 
 fun Modifier.zoomImage(state: ZoomState): Modifier = this.then(
     Modifier.graphicsLayer {

@@ -1,6 +1,5 @@
 package com.bera.whitehole.ui.components
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -16,10 +15,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CloudOff
+import androidx.compose.material.icons.rounded.Error
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,46 +34,33 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.work.WorkInfo
 import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
-import com.bera.whitehole.data.localdb.DbHolder
-import com.bera.whitehole.data.models.PhotoModel
+import com.bera.whitehole.R
+import com.bera.whitehole.data.localdb.entities.Photo
 import com.bera.whitehole.ui.main.pages.local.UploadState
 import com.bera.whitehole.utils.coil.ImageLoaderModule
 import com.bera.whitehole.workers.WorkModule
+import com.bera.whitehole.workers.WorkModule.UPLOADING_ID
 import com.posthog.PostHog
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @Composable
-fun PhotoView(
-    photo: PhotoModel,
-    showUiState: () -> MutableState<Boolean>,
-) {
+fun PhotoView(photo: Photo, isOnlyRemote: Boolean, showUiState: () -> MutableState<Boolean>) {
     val context = LocalContext.current
     var showUi by showUiState()
     val scope = rememberCoroutineScope()
-    val isLocal = rememberSaveable { photo.localId != null }
-    var photoUploadState by rememberSaveable { mutableStateOf(UploadState.NOT_UPLOADED) }
-    LaunchedEffect(key1 = Unit) {
-        if (isLocal) {
-            photoUploadState = UploadState.CHECKING
-            val isUploaded = withContext(Dispatchers.IO) {
-                DbHolder.database.photoDao().isUploaded(photo.localId!!)
-            }
-            photoUploadState = if (isUploaded == 0) {
-                UploadState.NOT_UPLOADED
-            } else {
-                UploadState.UPLOADED
-            }
-        }
+    val isOnlyOnDevice = rememberSaveable { photo.remoteId == null }
+    var photoUploadState by rememberSaveable {
+        mutableStateOf(
+            if (isOnlyOnDevice) UploadState.NOT_UPLOADED else UploadState.UPLOADED
+        )
     }
 
     Box(
@@ -92,7 +78,7 @@ fun PhotoView(
 
         val alpha by animateFloatAsState(
             targetValue = if (showUi) 0.5f else 0f,
-            label = "backgroundAlpha",
+            label = stringResource(R.string.backgroundalpha),
             animationSpec = tween(500)
         )
         AsyncImage(
@@ -111,68 +97,74 @@ fun PhotoView(
                 .zoomArea(zoomState),
             contentAlignment = Alignment.Center
         ) {
-            if (isLocal) {
-                AsyncImage(
-                    imageLoader = ImageLoaderModule.defaultImageLoader,
+            if (!isOnlyRemote) {
+                SubcomposeAsyncImage(
                     model = photo.pathUri,
-                    contentDescription = "photo",
+                    contentDescription = stringResource(R.string.photo),
                     modifier = Modifier
                         .fillMaxSize()
                         .zoomImage(zoomState),
                     contentScale = ContentScale.Fit,
+                    error = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .aspectRatio(1f)
+                                .background(MaterialTheme.colorScheme.primaryContainer),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                tint = MaterialTheme.colorScheme.onSurface,
+                                imageVector = Icons.Rounded.Error,
+                                contentDescription = stringResource(R.string.error),
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .padding(16.dp)
+                            )
+                        }
+                    }
                 )
             } else {
                 SubcomposeAsyncImage(
-                    imageLoader = ImageLoaderModule.defaultImageLoader,
-                    model = photo.pathUri,
-                    contentDescription = "photo",
+                    imageLoader = ImageLoaderModule.remoteImageLoader,
+                    model = ImageRequest.Builder(context)
+                        .data(photo.toRemotePhoto())
+                        .placeholderMemoryCacheKey(photo.remoteId)
+                        .memoryCacheKey(photo.remoteId)
+                        .build(),
                     contentScale = ContentScale.Fit,
                     modifier = Modifier
                         .fillMaxSize()
                         .zoomImage(zoomState),
-                    error = {
-                        SubcomposeAsyncImage(
-                            imageLoader = ImageLoaderModule.remoteImageLoader,
-                            model = ImageRequest.Builder(context)
-                                .data(photo)
-                                .placeholderMemoryCacheKey(photo.remoteId)
-                                .memoryCacheKey(photo.remoteId)
-                                .build(),
-                            contentScale = ContentScale.Fit,
+                    contentDescription = stringResource(id = R.string.photo),
+                    loading = {
+                        Box(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .zoomImage(zoomState),
-                            contentDescription = "photo",
-                            loading = {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .aspectRatio(1f)
-                                        .background(MaterialTheme.colorScheme.primaryContainer),
-                                    contentAlignment = Alignment.Center,
-                                ) {
-                                    LoadAnimation()
-                                }
-                            },
-                            error = {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .aspectRatio(1f)
-                                        .background(MaterialTheme.colorScheme.primaryContainer),
-                                    contentAlignment = Alignment.Center,
-                                ) {
-                                    Icon(
-                                        tint = MaterialTheme.colorScheme.onSurface,
-                                        imageVector = Icons.Rounded.CloudOff,
-                                        contentDescription = "error",
-                                        modifier = Modifier
-                                            .size(48.dp)
-                                            .padding(16.dp)
-                                    )
-                                }
-                            }
-                        )
+                                .aspectRatio(1f)
+                                .background(MaterialTheme.colorScheme.primaryContainer),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            LoadAnimation()
+                        }
+                    },
+                    error = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .aspectRatio(1f)
+                                .background(MaterialTheme.colorScheme.primaryContainer),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                tint = MaterialTheme.colorScheme.onSurface,
+                                imageVector = Icons.Rounded.CloudOff,
+                                contentDescription = stringResource(id = R.string.error),
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .padding(16.dp)
+                            )
+                        }
                     }
                 )
             }
@@ -183,7 +175,7 @@ fun PhotoView(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 AnimatedVisibility(
-                    visible = showUi && isLocal
+                    visible = !isOnlyRemote && showUi
                 ) {
                     FloatingBottomBar(
                         modifier = Modifier
@@ -193,10 +185,10 @@ fun PhotoView(
                         contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                         uploadState = photoUploadState,
                         onClickUpload = {
-                            PostHog.capture("upload-single")
-                            WorkModule.instantUpload(photo.pathUri.toUri())
+                            PostHog.capture(context.getString(R.string.upload_single))
+                            WorkModule.InstantUpload(photo.pathUri.toUri()).enqueue()
                             scope.launch {
-                                WorkModule.observeInstantWorkerById(photo.localId!!)
+                                WorkModule.observeWorkerByName("$UPLOADING_ID:${photo.localId}")
                                     .collectLatest {
                                         it.first().let { workInfo ->
                                             photoUploadState = when (workInfo.state) {

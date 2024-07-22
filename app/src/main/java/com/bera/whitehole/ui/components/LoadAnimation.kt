@@ -26,7 +26,7 @@ fun LoadAnimation(modifier: Modifier = Modifier) {
         targetValue = 0.4f,
         animationSpec = infiniteRepeatable(
             animation = tween(1000),
-            repeatMode = RepeatMode.Restart,
+            repeatMode = RepeatMode.Restart
         )
     )
 

@@ -1,1 +1,1 @@
-backup your photos using Telegram
+A feature-packed photo manager on top of Telegram.

@@ -2,7 +2,7 @@
 <div align="center">
   <img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp">
   <h1>Whitehole</h1>
-<p>Create a self-owned photo backup space on Telegram.</p>
+<p>A feature-packed photo manager on top of Telegram.</p>
 
 <!-- ---------- Badges ---------- -->
   <div align="center">
@@ -24,21 +24,29 @@
 </div>
 
 <!-- ---------- Description ---------- -->
+
 ## Features
 
-- [x] Self control of data
-- [x] No storage limit (as per Telegram's limits)
-- [x] Periodic auto backup
+- [x] Create and manage backups
+- [x] Complete customizability
+- [x] Automatic periodic sync
 - [x] Material Design 3 (You)
 - [x] Written in Jetpack Compose
 - [x] Entirely Open Source
 
+> [!Note]
+> - [x] This app plugs in with your Telegram bot to manage your photos, keeping you in charge of your data and privacy. 
+> - [x] Your bot is responsible for all operations(upload, download etc.) to and from Telegram and this app is just a client to interact with the bot. 
+> - [x] This app is not meant to and does not endorse spam or any other malicious activities. Please use it at your own responsibility.
+
 <!-- ---------- Download ---------- -->
+
 ## Download
-  
+
 <a href="https://github.com/beradeep/whitehole/releases"><img alt="Get it on GitHub" src="https://user-images.githubusercontent.com/69304392/148696068-0cfea65d-b18f-4685-82b5-329a330b1c0d.png" height=80px /><a href="https://apt.izzysoft.de/fdroid/index/apk/com.bera.whitehole"><img alt="Get it on izzy" src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" height=80px />
 
 <!-- ---------- Usage ---------- -->
+
 ## Getting Started
 
 - Visit BotFather on telegram and create a bot; you'll get a token.
@@ -49,24 +57,29 @@
 - Copy and paste the unique id the app and proceed.
 - Voilà! Your app is ready to use.
 
-
 <!-- ---------- Screenshots ---------- -->
+
 ## Screenshots
 
 <div style="display: flex;">
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/Screenshot_20240619_124755.png" width=24%>
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/Screenshot_20240619_125053.png" width=24%>
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/Screenshot_20240619_125113.png" width=24%>
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/Screenshot_20240619_125140.png" width=24%>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" width=24%>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" width=24%>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" width=24%>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" width=24%>
 
 </div>
 
 <!-- ---------- Contribution ---------- -->
+
 ## Feedback and contributions
+
 ***All contributions are very welcome!***
 
 * Bug reports and feature requests can be submitted [here](https://github.com/beradeep/whitehole/issues).
-* If you are a developer and wish to contribute to the app, please **fork** the project and submit a [**pull request**](https://help.github.com/articles/about-pull-requests/).
+* If you are a developer and wish to contribute to the app, please **fork** the project and submit a [**pull request
+  **](https://help.github.com/articles/about-pull-requests/).
 
 ## Credits
-* [kotlin-telegram-bot](https://github.com/kotlin-telegram-bot)
+
+* [kotlin-telegram-bot](https://github.com/kotlin-telegram-bot) for the Telegram bot library.
+* [Material Icons](https://material.io/resources/icons/) for the icons.

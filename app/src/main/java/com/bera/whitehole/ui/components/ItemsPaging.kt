@@ -10,16 +10,20 @@ import androidx.paging.compose.LazyPagingItems
 fun <T : Any> LazyGridScope.itemsPaging(
     items: LazyPagingItems<T>,
     key: ((item: T) -> Any)? = null,
-    itemContent: @Composable LazyGridItemScope.(value: T?, index: Int) -> Unit
+    itemContent: @Composable LazyGridItemScope.(value: T?, index: Int) -> Unit,
 ) {
     items(
         count = items.itemCount,
-        key = if (key == null) null else { index ->
-            val item = items.peek(index)
-            if (item == null) {
-                PagingPlaceholderKey(index)
-            } else {
-                key(item)
+        key = if (key == null) {
+            null
+        } else {
+            { index ->
+                val item = items.peek(index)
+                if (item == null) {
+                    PagingPlaceholderKey(index)
+                } else {
+                    key(item)
+                }
             }
         }
     ) { index ->

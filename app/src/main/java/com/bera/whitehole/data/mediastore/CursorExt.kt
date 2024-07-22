@@ -1,20 +1,22 @@
-package com.bera.whitehole.data.localphotosource
+package com.bera.whitehole.data.mediastore
 
 import android.content.ContentUris
 import android.database.Cursor
 import android.provider.MediaStore
-import com.bera.whitehole.data.models.PhotoModel
+import com.bera.whitehole.data.localdb.entities.Photo
 import com.bera.whitehole.utils.getExtFromMimeType
 
 @Throws(Exception::class)
-fun Cursor.getPhotoFromCursor(): PhotoModel.LocalPhotoModel {
+fun Cursor.getPhotoFromCursor(): Photo {
     val id: Long = getLong(getColumnIndexOrThrow(MediaStore.Images.ImageColumns._ID))
-    val mimeType: String = getString(getColumnIndexOrThrow(MediaStore.Images.ImageColumns.MIME_TYPE))
+    val mimeType: String =
+        getString(getColumnIndexOrThrow(MediaStore.Images.ImageColumns.MIME_TYPE))
     val contentUri = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
     val uri = ContentUris.withAppendedId(contentUri, id)
-    return PhotoModel.LocalPhotoModel(
-        id = id.toString(),
-        type = getExtFromMimeType(mimeType) ?: "jpg",
-        uri = uri.toString()
+    return Photo(
+        localId = id.toString(),
+        remoteId = null,
+        photoType = getExtFromMimeType(mimeType) ?: "jpg",
+        pathUri = uri.toString()
     )
 }

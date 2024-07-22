@@ -14,6 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import com.bera.whitehole.R
 import com.bera.whitehole.ui.main.pages.local.UploadState
 
 @Composable
@@ -35,28 +37,28 @@ fun FloatingBottomBar(
             when (uploadState) {
                 UploadState.CHECKING -> TextIcon(
                     imageVector = Icons.Rounded.CloudSync,
-                    title = "Checking Backup Status",
+                    title = stringResource(R.string.checking_backup_status),
                     color = contentColor,
                     isEnabled = false
                 )
 
                 UploadState.UPLOADING -> TextIcon(
                     imageVector = Icons.Rounded.ArrowCircleUp,
-                    title = "Uploading",
+                    title = stringResource(R.string.uploading),
                     color = contentColor,
                     isEnabled = false
                 )
 
                 UploadState.UPLOADED -> TextIcon(
                     imageVector = Icons.Rounded.CloudDone,
-                    title = "Backed Up",
+                    title = stringResource(R.string.backed_up),
                     color = contentColor,
                     isEnabled = false
                 )
 
                 UploadState.NOT_UPLOADED -> TextIcon(
                     imageVector = Icons.Rounded.CloudUpload,
-                    title = "Backup to Cloud",
+                    title = stringResource(R.string.backup_to_cloud),
                     color = contentColor,
                     isEnabled = true,
                     onItemClick = onClickUpload
@@ -64,7 +66,7 @@ fun FloatingBottomBar(
 
                 UploadState.FAILED -> TextIcon(
                     imageVector = Icons.Rounded.CloudOff,
-                    title = "Upload failed",
+                    title = stringResource(R.string.upload_failed),
                     color = contentColor,
                     isEnabled = true,
                     onItemClick = onClickUpload
@@ -72,7 +74,7 @@ fun FloatingBottomBar(
 
                 UploadState.ENQUEUED -> TextIcon(
                     imageVector = Icons.Rounded.Timer,
-                    title = "Upload enqueued",
+                    title = stringResource(R.string.upload_enqueued),
                     color = contentColor,
                     isEnabled = true,
                     onItemClick = onClickUpload
@@ -80,7 +82,7 @@ fun FloatingBottomBar(
 
                 UploadState.BLOCKED -> TextIcon(
                     imageVector = Icons.Rounded.CloudOff,
-                    title = "Upload blocked",
+                    title = stringResource(R.string.upload_blocked),
                     color = contentColor,
                     isEnabled = false
                 )

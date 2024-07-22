@@ -5,21 +5,23 @@ import android.content.Context
 import android.content.pm.ServiceInfo
 import android.provider.MediaStore
 import android.util.Log
-import androidx.compose.ui.util.fastForEach
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
+import com.bera.whitehole.R
 import com.bera.whitehole.api.BotApi
 import com.bera.whitehole.data.localdb.DbHolder
+import com.bera.whitehole.data.localdb.entities.Photo
+import com.bera.whitehole.data.localdb.entities.RemotePhoto
 import com.bera.whitehole.utils.getMimeTypeFromExt
 import com.bera.whitehole.utils.toastFromMainThread
+import java.io.ByteArrayInputStream
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.io.ByteArrayInputStream
 
-class DownloadAllPhotosWorker(
+class DownloadMissingPhotosWorker(
     private val context: Context,
-    params: WorkerParameters
+    params: WorkerParameters,
 ) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result {
         try {
@@ -31,20 +33,30 @@ class DownloadAllPhotosWorker(
         }
         try {
             withContext(Dispatchers.IO) {
-                DbHolder.database.photoDao().getAllPhotos()
-                    .fastForEach { photo ->
-                        val byteArray = BotApi.getFile(photo.remoteId)
+                val remoteIdList = DbHolder.database.remotePhotoDao().getNotOnDevice()
+                val photosToInsert = mutableListOf<Photo>()
+                val remotesPhotosToRemove = mutableListOf<RemotePhoto>()
+                remoteIdList
+                    .forEach { remotePhoto ->
+                        val byteArray = BotApi.getFile(remotePhoto.remoteId)!!
                         val inStream = ByteArrayInputStream(byteArray)
                         val contentValues = ContentValues().apply {
                             put(
                                 MediaStore.MediaColumns.DISPLAY_NAME,
-                                "whitehole_${photo.remoteId}.${photo.photoType}"
+                                context.getString(
+                                    R.string.whitehole,
+                                    remotePhoto.remoteId,
+                                    remotePhoto.photoType
+                                )
                             )
                             put(
                                 MediaStore.MediaColumns.MIME_TYPE,
-                                getMimeTypeFromExt(photo.photoType)
+                                getMimeTypeFromExt(remotePhoto.photoType)!!
                             )
-                            put(MediaStore.MediaColumns.RELATIVE_PATH, "Download/Whitehole")
+                            put(
+                                MediaStore.MediaColumns.RELATIVE_PATH,
+                                context.getString(R.string.download_whitehole)
+                            )
                         }
 
                         val resolver = context.contentResolver
@@ -59,12 +71,18 @@ class DownloadAllPhotosWorker(
                                     inStream.copyTo(outStream!!)
                                 }
                             }
-                            val newPhoto = photo.copy(
-                                localId = uri.lastPathSegment ?: ""
+                            photosToInsert.add(
+                                Photo(
+                                    localId = uri.lastPathSegment!!,
+                                    remoteId = remotePhoto.remoteId,
+                                    photoType = remotePhoto.photoType,
+                                    pathUri = uri.toString()
+                                )
                             )
-                            DbHolder.database.photoDao().upsertPhotos(newPhoto)
                         }
                     }
+                DbHolder.database.photoDao().insertPhotos(*photosToInsert.toTypedArray())
+                DbHolder.database.remotePhotoDao().deleteAll(*remotesPhotosToRemove.toTypedArray())
             }
             return Result.success()
         } catch (e: Exception) {
@@ -77,7 +95,7 @@ class DownloadAllPhotosWorker(
     override suspend fun getForegroundInfo(): ForegroundInfo {
         return ForegroundInfo(
             WorkModule.NOTIFICATION_ID,
-            makeStatusNotification("Saving all photos to device..", context),
+            makeStatusNotification("Downloading photos", context),
             ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
         )
     }

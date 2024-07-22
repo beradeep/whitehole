@@ -1,7 +1,7 @@
 package com.bera.whitehole.utils
 
 import android.content.ContentResolver
-import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
@@ -15,15 +15,18 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import com.bera.whitehole.R
 import com.bera.whitehole.api.BotApi
 import com.bera.whitehole.data.localdb.DbHolder
 import com.bera.whitehole.data.localdb.entities.Photo
+import com.bera.whitehole.data.localdb.entities.RemotePhoto
+import com.github.kotlintelegrambot.entities.files.Document
 import com.github.kotlintelegrambot.network.fold
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.random.Random
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 fun getFileName(contentResolver: ContentResolver, uri: Uri): String? {
     var fileName: String? = null
@@ -54,7 +57,7 @@ fun getExtFromMimeType(mimeType: String): String? {
 
 fun scaleIntoContainer(
     direction: ScaleTransitionDirection = ScaleTransitionDirection.INWARDS,
-    initialScale: Float = if (direction == ScaleTransitionDirection.OUTWARDS) 0.9f else 1.1f
+    initialScale: Float = if (direction == ScaleTransitionDirection.OUTWARDS) 0.9f else 1.1f,
 ): EnterTransition {
     return scaleIn(
         animationSpec = tween(220, delayMillis = 90),
@@ -64,18 +67,20 @@ fun scaleIntoContainer(
 
 fun scaleOutOfContainer(
     direction: ScaleTransitionDirection = ScaleTransitionDirection.OUTWARDS,
-    targetScale: Float = if (direction == ScaleTransitionDirection.INWARDS) 0.9f else 1.1f
+    targetScale: Float = if (direction == ScaleTransitionDirection.INWARDS) 0.9f else 1.1f,
 ): ExitTransition {
     return scaleOut(
         animationSpec = tween(
             durationMillis = 220,
             delayMillis = 90
-        ), targetScale = targetScale
+        ),
+        targetScale = targetScale
     ) + fadeOut(tween(delayMillis = 90))
 }
 
 enum class ScaleTransitionDirection {
-    INWARDS, OUTWARDS
+    INWARDS,
+    OUTWARDS,
 }
 
 fun getMimeTypeFromExt(extension: String): String? {
@@ -87,7 +92,7 @@ suspend fun sendFileViaUri(
     uri: Uri,
     contentResolver: ContentResolver,
     channelId: Long,
-    botApi: BotApi
+    botApi: BotApi,
 ) {
     val mimeType: String? = getMimeTypeFromUri(contentResolver, uri)
     val fileExtension = getExtFromMimeType(mimeType!!)
@@ -104,7 +109,7 @@ suspend fun sendFileViaUri(
             fileExtension!!
         )
         outputStream.close()
-        Log.d(ContentValues.TAG, tempFile.name)
+        Log.d(TAG, tempFile.name)
         tempFile.deleteOnExit()
     }
 }
@@ -116,29 +121,30 @@ suspend fun sendFileApi(
     file: File,
     extension: String,
 ) {
+    var resFile: Document? = null
     botApi.sendFile(file, channelId).fold(
         { response ->
-            Log.d("tag", "sendFile: success1")
-            response?.result?.document?.let { resFile ->
-                val photo =
-                    Photo(
-                        pathUri.lastPathSegment ?: "",
-                        resFile.fileId,
-                        extension,
-                        pathUri.toString()
-                    )
-                DbHolder.database.photoDao().upsertPhotos(photo)
-                Log.d("tag", "sendFile: success")
-                Log.d("tag", "sendFile: $photo")
-            } ?: {
-                Log.d("tag", "sendFile: failed")
-            }
+            resFile = response?.result?.document
         }
     )
-    Log.d("tag", "sendFile: success3")
+    resFile?.let {
+        val photo = Photo(
+            pathUri.lastPathSegment ?: "",
+            it.fileId,
+            extension,
+            pathUri.toString()
+        )
+        val remotePhoto = RemotePhoto(
+            it.fileId,
+            extension
+        )
+        DbHolder.database.photoDao().updatePhotos(photo)
+        DbHolder.database.remotePhotoDao().insertAll(remotePhoto)
+        Log.d(TAG, "sendFile: Success!")
+    } ?: Log.d(TAG, "sendFile: Failed!")
 }
 
 suspend fun Context.toastFromMainThread(msg: String?, length: Int = Toast.LENGTH_LONG) =
     withContext(Dispatchers.Main) {
-        Toast.makeText(this@toastFromMainThread, msg ?: "Error", length).show()
+        Toast.makeText(this@toastFromMainThread, msg ?: getString(R.string.error), length).show()
     }

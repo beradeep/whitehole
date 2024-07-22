@@ -36,7 +36,7 @@ fun Modifier.photoSharedElement(
             placeHolderSize = placeHolderSize,
             renderInOverlayDuringTransition = renderInOverlayDuringTransition,
             zIndexInOverlay = zIndexInOverlay,
-            clipInOverlayDuringTransition = clipInOverlayDuringTransition,
+            clipInOverlayDuringTransition = clipInOverlayDuringTransition
         )
     }
 }
@@ -56,7 +56,7 @@ private val ParentClip: SharedTransitionScope.OverlayClip =
 
 private val DefaultSpring = spring(
     stiffness = Spring.StiffnessMediumLow,
-    visibilityThreshold = Rect.VisibilityThreshold,
+    visibilityThreshold = Rect.VisibilityThreshold
 )
 
 @OptIn(ExperimentalSharedTransitionApi::class)

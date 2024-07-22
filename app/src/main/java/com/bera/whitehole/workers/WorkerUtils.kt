@@ -24,7 +24,6 @@ private const val TAG = "WorkerUtils"
  * @param context Context needed to create Toast
  */
 fun makeStatusNotification(message: String, context: Context): Notification {
-
     val name = VERBOSE_NOTIFICATION_CHANNEL_NAME
     val description = VERBOSE_NOTIFICATION_CHANNEL_DESCRIPTION
     val importance = NotificationManager.IMPORTANCE_HIGH

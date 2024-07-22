@@ -8,21 +8,21 @@ import coil.fetch.Fetcher
 import coil.fetch.SourceResult
 import coil.request.Options
 import com.bera.whitehole.api.BotApi
-import com.bera.whitehole.data.models.PhotoModel
+import com.bera.whitehole.data.localdb.entities.RemotePhoto
 import com.bera.whitehole.utils.getMimeTypeFromExt
 
 class NetworkFetcher(
     private val botApi: BotApi = BotApi,
-    private val photo: PhotoModel.RemotePhotoModel,
-    private val options: Options
+    private val remotePhoto: RemotePhoto,
+    private val options: Options,
 ) : Fetcher {
     override suspend fun fetch(): FetchResult? {
-        val byteArray = botApi.getFile(photo.remoteId!!)
+        val byteArray = botApi.getFile(remotePhoto.remoteId)
         return if (byteArray != null) {
             val buffer = okio.Buffer().write(byteArray)
             SourceResult(
                 source = ImageSource(buffer, options.context),
-                mimeType = getMimeTypeFromExt(photo.photoType),
+                mimeType = getMimeTypeFromExt(remotePhoto.photoType),
                 dataSource = DataSource.NETWORK
             )
         } else {
@@ -32,11 +32,11 @@ class NetworkFetcher(
 
     class Factory(
         private val botApi: BotApi = BotApi,
-    ) : Fetcher.Factory<PhotoModel.RemotePhotoModel> {
+    ) : Fetcher.Factory<RemotePhoto> {
         override fun create(
-            data: PhotoModel.RemotePhotoModel,
+            data: RemotePhoto,
             options: Options,
-            imageLoader: ImageLoader
+            imageLoader: ImageLoader,
         ): Fetcher? = NetworkFetcher(botApi, data, options)
     }
 }

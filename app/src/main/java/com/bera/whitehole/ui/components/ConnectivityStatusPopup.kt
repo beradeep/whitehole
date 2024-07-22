@@ -27,10 +27,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bera.whitehole.connectivity.ConnectivityObserver
-import com.bera.whitehole.connectivity.ConnectivityStatus
+import com.bera.whitehole.R
+import com.bera.whitehole.utils.connectivity.ConnectivityObserver
+import com.bera.whitehole.utils.connectivity.ConnectivityStatus
 import kotlinx.coroutines.delay
 
 @Composable
@@ -65,13 +67,19 @@ fun ConnectivityStatusPopup() {
 fun ConnectivityStatusBox(isConnected: Boolean) {
     val backgroundColor by animateColorAsState(
         targetValue = if (isConnected) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.error,
-        label = "connectivity status background color"
+        label = stringResource(R.string.connectivity_status_background_color)
     )
     val contentColor by animateColorAsState(
         targetValue = if (isConnected) MaterialTheme.colorScheme.onErrorContainer else MaterialTheme.colorScheme.onError,
-        label = "connectivity status background color"
+        label = stringResource(R.string.connectivity_status_content_color)
     )
-    val message = if (isConnected) "Back Online!" else "No Internet Connection!"
+    val message = if (isConnected) {
+        stringResource(
+            R.string.back_online
+        )
+    } else {
+        stringResource(R.string.no_internet_connection)
+    }
     val iconVector = if (isConnected) {
         Icons.Rounded.CloudDone
     } else {
@@ -87,7 +95,11 @@ fun ConnectivityStatusBox(isConnected: Boolean) {
         contentAlignment = Alignment.Center
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(imageVector = iconVector, "Connectivity Icon", tint = contentColor)
+            Icon(
+                imageVector = iconVector,
+                stringResource(R.string.connectivity_icon),
+                tint = contentColor
+            )
             Spacer(modifier = Modifier.size(8.dp))
             Text(message, color = contentColor, fontSize = 15.sp)
         }

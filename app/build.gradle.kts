@@ -1,8 +1,10 @@
 import java.util.Properties
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
 plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.android.application)
+    alias(libs.plugins.ktlint)
     id("org.jetbrains.kotlin.kapt")
     id("kotlin-parcelize")
 }
@@ -15,8 +17,8 @@ android {
         applicationId = "com.bera.whitehole"
         minSdk = 29
         targetSdk = 34
-        versionCode = 4
-        versionName = "0.4"
+        versionCode = 5
+        versionName = "0.5"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -43,7 +45,7 @@ android {
             isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
+                "proguard-rules.pro"
             )
         }
         create("debugMini") {
@@ -81,12 +83,21 @@ android {
         // Disables dependency metadata when building Android App Bundles.
         includeInBundle = false
     }
-
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KaptGenerateStubs> {
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+}
+
+ktlint {
+    android.set(true)
+    ignoreFailures.set(false)
+    reporters {
+        reporter(ReporterType.PLAIN)
+        reporter(ReporterType.CHECKSTYLE)
+        reporter(ReporterType.JSON)
     }
 }
 
@@ -109,22 +120,23 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    debugImplementation(libs.leakcanary.android)
 
     implementation(libs.androidx.contentpager)
 
-    //Telegram bot
+    // Telegram bot
     implementation(libs.telegram)
 
-    //Compose navigation
+    // Compose navigation
     implementation(libs.androidx.navigation.compose)
 
-    //Retrofit
+    // Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.converter.jackson)
     implementation(libs.okhttp)
 
-    //Room
+    // Room
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.paging)
@@ -137,23 +149,23 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
 
-    //Coil
+    // Coil
     implementation(libs.coil.compose)
 
-    //Material icons
+    // Material icons
     implementation(libs.androidx.material.icons.extended)
 
-    //New 3-Way navigation
+    // New 3-Way navigation
     implementation(libs.androidx.compose.material3.adaptive.navigation)
     implementation(libs.androidx.compose.material3.adaptive.navigation.suite)
 
-    //Work Manager
+    // Work Manager
     implementation(libs.androidx.work.runtime)
 
-    //Paging
+    // Paging
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)
 
-    //Analytics
+    // Analytics
     implementation(libs.posthog.android)
 }

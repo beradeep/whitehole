@@ -1,4 +1,4 @@
-package com.bera.whitehole.data.localphotosource
+package com.bera.whitehole.data.mediastore
 
 import android.content.ContentResolver
 import android.os.Bundle
@@ -6,7 +6,7 @@ import android.provider.MediaStore
 
 sealed class Query(
     var projection: Array<String>,
-    var bundle: Bundle? = null
+    var bundle: Bundle? = null,
 ) {
     class MediaQuery : Query(
         projection = arrayOf(
@@ -22,7 +22,7 @@ sealed class Query(
             MediaStore.MediaColumns.MIME_TYPE,
             MediaStore.MediaColumns.IS_FAVORITE,
             MediaStore.MediaColumns.IS_TRASHED
-        ),
+        )
     )
 
     class PhotoQuery : Query(
@@ -35,7 +35,7 @@ sealed class Query(
             .apply {
                 putString(
                     ContentResolver.QUERY_ARG_SORT_COLUMNS,
-                    MediaStore.Images.ImageColumns.DATE_MODIFIED,
+                    MediaStore.Images.ImageColumns.DATE_MODIFIED
                 )
                 putInt(
                     ContentResolver.QUERY_ARG_SORT_DIRECTION,
@@ -48,7 +48,7 @@ sealed class Query(
         projection = arrayOf(
             MediaStore.Video.VideoColumns._ID,
             MediaStore.Video.VideoColumns.DATE_MODIFIED,
-            MediaStore.Video.VideoColumns.MIME_TYPE,
+            MediaStore.Video.VideoColumns.MIME_TYPE
         ),
         bundle = Bundle().apply {
             putString(
@@ -62,10 +62,7 @@ sealed class Query(
         }
     )
 
-    fun copy(
-        projection: Array<String> = this.projection,
-        bundle: Bundle? = this.bundle,
-    ): Query {
+    fun copy(projection: Array<String> = this.projection, bundle: Bundle? = this.bundle): Query {
         this.projection = projection
         this.bundle = bundle
         return this

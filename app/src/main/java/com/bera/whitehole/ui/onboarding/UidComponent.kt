@@ -1,14 +1,15 @@
 package com.bera.whitehole.ui.onboarding
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -28,8 +29,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -47,7 +50,7 @@ fun UidComponent(
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit,
     onNavigate: () -> Unit,
-    botApi: BotApi = BotApi
+    botApi: BotApi = BotApi,
 ) {
     var inputIdState by remember { mutableStateOf("") }
     var isValidInput by remember { mutableStateOf(true) }
@@ -67,98 +70,112 @@ fun UidComponent(
                 icon = {
                     Image(
                         painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                        contentDescription = "app_icon"
+                        contentDescription = stringResource(id = R.string.app_icon)
                     )
                 },
                 confirmButton = {
                     TextButton(onClick = { showStepsDisclaimer = false }) {
                         Text(
-                            text = "GOT IT",
+                            text = stringResource(id = R.string.got_it),
                             style = MaterialTheme.typography.bodyLarge,
-                            fontWeight = FontWeight.Bold,
+                            fontWeight = FontWeight.Bold
                         )
                     }
                 },
-                title = { Text(text = "Just a few more..") },
+                title = { Text(text = stringResource(R.string.just_a_few_more)) },
                 text = {
                     Column {
-                        Text(text = "1. Create a private group on Telegram.")
-                        Text(text = "2. Add the bot to the group.")
-                        Text(text = "3. Type \"/start\" in the group.")
-                        Text(text = "4. Copy and paste the unique id here.")
-                        Text(text = "5. Click on Proceed.")
+                        Text(text = stringResource(R.string._1_create_a_private_group_on_telegram))
+                        Text(text = stringResource(R.string._2_add_the_bot_to_the_group))
+                        Text(text = stringResource(R.string._3_type_start_in_the_group))
+                        Text(text = stringResource(R.string._4_copy_and_paste_the_unique_id_here))
+                        Text(text = stringResource(id = R.string._5_click_on_proceed))
                     }
                 }
             )
         }
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
+        Box(
+            Modifier
+                .background(MaterialTheme.colorScheme.surface)
+                .clip(RoundedCornerShape(16.dp))
         ) {
-            Spacer(modifier = Modifier.weight(1f))
-            TextField(
-                value = inputIdState,
-                onValueChange = { inputIdState = it },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number
-                ),
-                isError = !isValidInput,
-                supportingText = {
-                    AnimatedVisibility(visible = !isValidInput, enter = slideInVertically()) {
-                        Column {
-                            Text(
-                                text = "Invalid UID or token.",
-                                style = MaterialTheme.typography.bodySmall
-                            )
-                            Spacer(modifier = Modifier.height(12.dp))
+            Column(
+                modifier = modifier.padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                TextField(
+                    value = inputIdState,
+                    onValueChange = { inputIdState = it },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number
+                    ),
+                    isError = !isValidInput,
+                    supportingText = {
+                        AnimatedContent(
+                            targetState = isValidInput,
+                            label = stringResource(R.string.supporttext)
+                        ) {
+                            Column {
+                                if (!it) {
+                                    Text(
+                                        text = stringResource(R.string.invalid_uid_or_token),
+                                        style = MaterialTheme.typography.bodySmall
+                                    )
+                                } else {
+                                    Text(
+                                        text = stringResource(
+                                            R.string.can_be_ve_or_ve_e_g_1234567890_do_not_ignore_the_sign
+                                        ),
+                                        style = MaterialTheme.typography.bodySmall
+                                    )
+                                }
+                                Spacer(modifier = Modifier.height(12.dp))
+                            }
                         }
-                    }
-                },
-                colors = TextFieldDefaults.colors().copy(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    errorIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent,
-                ),
-                label = { Text(text = "Unique ID (/start in gc)") },
-                singleLine = true,
-                shape = RoundedCornerShape(16.dp),
-                textStyle = MaterialTheme.typography.titleLarge,
-                modifier = Modifier
-                    .width(300.dp)
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Button(
-                modifier = Modifier
-                    .width(300.dp)
-                    .height(50.dp),
-                shape = RoundedCornerShape(16.dp),
-                onClick = {
-                    scope.launch {
-                        val id = inputIdState.toLongOrNull()
-                        if (id != null) {
-                            if (botApi.getChat(ChatId.fromId(id)) && botApi.chatId == id) {
-                                // verification successful
-                                Preferences.edit { putLong(Preferences.channelId, id) }
-                                PostHog.identify(id.toString())
-
-                                // navigate to main screen
-                                onNavigate()
+                    },
+                    colors = TextFieldDefaults.colors().copy(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        errorIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent
+                    ),
+                    label = { Text(text = stringResource(R.string.unique_id_start_in_gc)) },
+                    singleLine = true,
+                    shape = RoundedCornerShape(16.dp),
+                    textStyle = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier
+                        .width(300.dp)
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Button(
+                    modifier = Modifier
+                        .width(300.dp)
+                        .height(50.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    onClick = {
+                        scope.launch {
+                            val id = inputIdState.toLongOrNull()
+                            if (id != null) {
+                                if (botApi.getChat(ChatId.fromId(id)) && botApi.chatId == id) {
+                                    // verification successful
+                                    Preferences.edit { putLong(Preferences.channelId, id) }
+                                    PostHog.identify(id.toString())
+                                    botApi.stopPolling()
+                                    // navigate to main screen
+                                    onNavigate()
+                                } else {
+                                    isValidInput = false
+                                }
                             } else {
                                 isValidInput = false
                             }
-                        } else {
-                            isValidInput = false
                         }
                     }
+                ) {
+                    Text(text = stringResource(id = R.string.proceed))
                 }
-            ) {
-                Text(text = "Proceed")
             }
-            Spacer(modifier = Modifier.weight(1f))
         }
     }
 }

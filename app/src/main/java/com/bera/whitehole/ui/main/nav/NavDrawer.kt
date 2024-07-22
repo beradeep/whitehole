@@ -49,7 +49,7 @@ fun NavDrawer(
     pages: List<Screens>,
     navController: NavController,
     viewModel: MainViewModel,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
 
@@ -72,7 +72,7 @@ fun NavDrawer(
             ModalDrawerSheet(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .verticalScroll(scrollState),
+                    .verticalScroll(scrollState)
             ) {
                 Spacer(Modifier.height(20.dp))
                 Row(
@@ -123,7 +123,7 @@ private fun DrawerSheet(
     drawerContainerColor: Color = MaterialTheme.colorScheme.surface,
     drawerContentColor: Color = contentColorFor(drawerContainerColor),
     drawerTonalElevation: Dp = DrawerDefaults.PermanentDrawerElevation,
-    content: @Composable ColumnScope.() -> Unit
+    content: @Composable ColumnScope.() -> Unit,
 ) {
     Surface(
         modifier = modifier
@@ -158,7 +158,7 @@ fun ModalDrawerSheet(
     drawerContentColor: Color = contentColorFor(drawerContainerColor),
     drawerTonalElevation: Dp = DrawerDefaults.ModalDrawerElevation,
     windowInsets: WindowInsets = DrawerDefaults.windowInsets,
-    content: @Composable ColumnScope.() -> Unit
+    content: @Composable ColumnScope.() -> Unit,
 ) {
     DrawerSheet(
         windowInsets,

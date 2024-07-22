@@ -9,13 +9,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.bera.whitehole.data.models.PhotoModel
+import com.bera.whitehole.data.localdb.entities.Photo
 
 @Composable
 fun PhotoPageView(
     initialPage: Int,
-    photos: List<PhotoModel>,
-    onDismissRequest: () -> Unit
+    photos: List<Photo>,
+    onlyRemotePhotos: Boolean,
+    onDismissRequest: () -> Unit,
 ) {
     val showUiState = remember { mutableStateOf(true) }
     val pagerState = rememberPagerState(
@@ -31,7 +32,9 @@ fun PhotoPageView(
         HorizontalPager(modifier = Modifier.fillMaxSize(), state = pagerState) {
             PhotoView(
                 photo = photos[it],
-                showUiState = { showUiState })
+                isOnlyRemote = onlyRemotePhotos,
+                showUiState = { showUiState }
+            )
         }
     }
 }

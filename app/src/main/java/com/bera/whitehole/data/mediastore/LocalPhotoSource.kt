@@ -1,29 +1,27 @@
-package com.bera.whitehole.data.localphotosource
+package com.bera.whitehole.data.mediastore
 
 import android.content.ContentResolver
 import android.content.Context
-import android.net.Uri
 import android.provider.MediaStore
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.bera.whitehole.data.models.PhotoModel
+import com.bera.whitehole.data.localdb.entities.Photo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-object LocalPhotoSource : PagingSource<Int, PhotoModel.LocalPhotoModel>() {
+object LocalPhotoSource : PagingSource<Int, Photo>() {
 
     private lateinit var contentResolver: ContentResolver
     private val imageCollection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
 
     override val jumpingSupported: Boolean = true
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PhotoModel.LocalPhotoModel> {
-
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Photo> {
         val page = params.key ?: 1
         val pageSize = params.loadSize
         val limit = pageSize
         val offset = (page - 1) * pageSize
-        val pagePhotoList = mutableListOf<PhotoModel.LocalPhotoModel>()
+        val pagePhotoList = mutableListOf<Photo>()
         val query =
             Query.PhotoQuery().copy(
                 bundle = Query.PhotoQuery().bundle?.apply {
@@ -66,7 +64,7 @@ object LocalPhotoSource : PagingSource<Int, PhotoModel.LocalPhotoModel>() {
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, PhotoModel.LocalPhotoModel>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, Photo>): Int? {
         return state.anchorPosition
     }
 

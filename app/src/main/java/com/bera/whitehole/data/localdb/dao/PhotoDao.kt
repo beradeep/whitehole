@@ -1,11 +1,12 @@
 package com.bera.whitehole.data.localdb.dao
 
 import androidx.annotation.Keep
-import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import androidx.room.Dao
-import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import androidx.room.Upsert
 import com.bera.whitehole.data.localdb.entities.Photo
 import kotlinx.coroutines.flow.Flow
@@ -15,32 +16,48 @@ import kotlinx.coroutines.flow.Flow
 interface PhotoDao {
 
     @Query("SELECT * FROM photos")
-    suspend fun getAllPhotos(): List<Photo>
+    suspend fun getAll(): List<Photo>
 
     @Query("SELECT * FROM photos")
-    fun getAllPhotosFlow(): Flow<List<Photo>>
+    fun getAllPaging(): PagingSource<Int, Photo>
 
-    @Query("SELECT * FROM photos ORDER BY localId DESC")
-    fun getAllPhotosSortedFlow(): Flow<List<Photo>>
+    @Query("SELECT * FROM photos WHERE remoteId IS NOT NULL")
+    fun getAllUploadedPaging(): PagingSource<Int, Photo>
 
-    @Query("SELECT * FROM photos")
-    fun getAllPhotosPaging(): PagingSource<Int, Photo>
+    @Query("SELECT COUNT(*) FROM photos")
+    fun getAllCountFlow(): Flow<Int>
 
-    @Query("SELECT * FROM photos ORDER BY localId DESC")
-    fun getAllPhotosSortedPaging(): PagingSource<Int, Photo>
-
-    @Query("SELECT remoteId FROM photos")
-    suspend fun getAllPhotoIds(): List<String>
-
-    @Query("SELECT EXISTS(SELECT 1 FROM photos WHERE localId = :localId)")
+    @Query("SELECT EXISTS(SELECT 1 FROM photos WHERE localId = :localId AND remoteId IS NOT NULL)")
     suspend fun isUploaded(localId: String): Int
 
-    @Upsert
-    fun upsertPhotos(vararg photos: Photo)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertPhotos(vararg photos: Photo): List<Long>
 
-    @Delete
-    suspend fun deletePhoto(photo: Photo)
+    @Update
+    suspend fun updatePhotos(vararg photos: Photo)
+
+    @Query("DELETE FROM photos WHERE localId = :id")
+    suspend fun deleteById(id: String)
 
     @Query("DELETE FROM photos")
-    suspend fun deleteAllPhotos()
+    suspend fun deleteAll()
+
+    @Query("SELECT * FROM photos WHERE remoteId IS NULL")
+    suspend fun getAllNotUploaded(): List<Photo>
+
+    // NOT USED RIGHT NOW
+    @Upsert
+    suspend fun upsertPhotos(vararg photos: Photo)
+
+    // NOT USED RIGHT NOW
+    @Query("SELECT * FROM photos WHERE remoteId IS NOT NULL")
+    suspend fun getAllUploaded(): List<Photo>
+
+    // NOT USED RIGHT NOW
+    @Query("SELECT COUNT(*) FROM photos WHERE remoteId IS NOT NULL")
+    fun getAllUploadedCountFlow(): Flow<Int>
+
+    // NOT USED RIGHT NOW
+    @Query("SELECT * FROM photos WHERE remoteId IS NULL")
+    fun getAllNotUploadedPaging(): PagingSource<Int, Photo>
 }

@@ -10,9 +10,9 @@ import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Message
 import com.github.kotlintelegrambot.entities.TelegramFile
 import com.github.kotlintelegrambot.network.Response
+import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.io.File
 
 /**
  * The remote API module of the project.
@@ -26,7 +26,7 @@ object BotApi {
         bot = bot {
             token = Preferences.getString(
                 Preferences.botToken,
-                SAMPLE_API_KEY,
+                SAMPLE_API_KEY
             )
             dispatch {
                 command("start") {
@@ -58,16 +58,15 @@ object BotApi {
 
     suspend fun sendFile(
         file: File,
-        channelId: Long
+        channelId: Long,
     ): Pair<retrofit2.Response<Response<Message>?>?, Exception?> {
         return withContext(Dispatchers.IO) {
             bot.sendDocument(
                 chatId = ChatId.fromId(channelId),
                 document = TelegramFile.ByFile(file),
-                disableContentTypeDetection = false,
+                disableContentTypeDetection = false
             )
         }
-
     }
 
     suspend fun getFile(fileId: String): ByteArray? {

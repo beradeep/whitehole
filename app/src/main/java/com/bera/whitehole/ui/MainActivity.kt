@@ -31,11 +31,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.bera.whitehole.R
 import com.bera.whitehole.data.localdb.Preferences
 import com.bera.whitehole.ui.main.MainPage
 import com.bera.whitehole.ui.main.MainViewModel
@@ -77,7 +79,11 @@ class MainActivity : ComponentActivity() {
                     Preferences.channelId,
                     0L
                 ) == 0L
-            ) ScreenFlow.Onboarding.route else ScreenFlow.Main.route
+            ) {
+                ScreenFlow.Onboarding.route
+            } else {
+                ScreenFlow.Main.route
+            }
         setContent {
             AppTheme {
                 val context = LocalContext.current
@@ -120,16 +126,16 @@ class MainActivity : ComponentActivity() {
                                         .fillMaxSize()
                                         .padding(40.dp),
                                     horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.Center,
+                                    verticalArrangement = Arrangement.Center
                                 ) {
                                     Text(
-                                        text = "Permissions Required",
+                                        text = stringResource(R.string.permissions_required),
                                         style = MaterialTheme.typography.headlineLarge
                                     )
                                     Spacer(modifier = Modifier.size(40.dp))
                                     Text(
-                                        text = "This app requires permission to photos and notifications " +
-                                                "to work as intended. Please grant the permissions to continue."
+                                        text = stringResource(R.string.this_app_requires_permission_to_photos_and_notifications) +
+                                            stringResource(R.string.to_work_as_intended_please_grant_the_permissions_to_continue)
                                     )
                                     Spacer(modifier = Modifier.size(40.dp))
                                     Button(
@@ -144,7 +150,7 @@ class MainActivity : ComponentActivity() {
                                         shape = RoundedCornerShape(16.dp)
                                     ) {
                                         Text(
-                                            text = "Grant Permissions".uppercase(),
+                                            text = stringResource(R.string.grant_permissions),
                                             style = MaterialTheme.typography.bodyLarge
                                         )
                                     }
@@ -208,7 +214,6 @@ sealed class ScreenFlow(val route: String) {
     data object Onboarding : ScreenFlow("onboard")
     data object Main : ScreenFlow("main")
 }
-
 
 fun Activity.openAppSettings() {
     Intent(

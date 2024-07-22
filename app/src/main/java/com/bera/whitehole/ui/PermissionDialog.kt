@@ -9,9 +9,11 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.bera.whitehole.R
 
 @Composable
 fun PermissionDialog(
@@ -20,7 +22,7 @@ fun PermissionDialog(
     onDismiss: () -> Unit,
     onOkClick: () -> Unit,
     onGoToAppSettingsClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -30,10 +32,10 @@ fun PermissionDialog(
             ) {
                 Divider()
                 Text(
-                    text = if(isPermanentlyDeclined) {
-                        "Grant permission"
+                    text = if (isPermanentlyDeclined) {
+                        stringResource(R.string.grant_permission)
                     } else {
-                        "OK"
+                        stringResource(R.string.ok)
                     },
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
@@ -51,7 +53,7 @@ fun PermissionDialog(
             }
         },
         title = {
-            Text(text = "Permission required")
+            Text(text = stringResource(R.string.permission_required))
         },
         text = {
             Text(
@@ -68,14 +70,14 @@ interface PermissionTextProvider {
     fun getDescription(isPermanentlyDeclined: Boolean): String
 }
 
-class PhotosPermissionTextProvider: PermissionTextProvider {
+class PhotosPermissionTextProvider : PermissionTextProvider {
     override fun getDescription(isPermanentlyDeclined: Boolean): String {
-        return if(isPermanentlyDeclined) {
+        return if (isPermanentlyDeclined) {
             "It seems you permanently declined photos permission. " +
-                    "You can go to the app settings to grant it."
+                "You can go to the app settings to grant it."
         } else {
             "This app needs access to your photos so that you can back " +
-                    "them up to Telegram."
+                "them up to Telegram."
         }
     }
 }

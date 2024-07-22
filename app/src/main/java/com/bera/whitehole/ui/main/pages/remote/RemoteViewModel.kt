@@ -6,22 +6,29 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.paging.map
 import com.bera.whitehole.data.localdb.DbHolder
-import com.bera.whitehole.data.models.PhotoModel
+import com.bera.whitehole.data.localdb.entities.Photo
+import com.bera.whitehole.data.localdb.entities.RemotePhoto
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 class RemoteViewModel : ViewModel() {
-    val remotePhotosFlow: Flow<PagingData<PhotoModel.RemotePhotoModel>> by lazy {
+    val remotePhotosOnDeviceFlow: Flow<PagingData<Photo>> by lazy {
         Pager(
             config = PagingConfig(pageSize = PAGE_SIZE, jumpThreshold = JUMP_THRESHOLD),
-            pagingSourceFactory = { DbHolder.database.photoDao().getAllPhotosSortedPaging() }
-        ).flow.map { pagingData ->
-            pagingData.map {
-                it.toRemotePhotoModel()
-            }
-        }.cachedIn(viewModelScope)
+            pagingSourceFactory = { DbHolder.database.photoDao().getAllUploadedPaging() }
+        ).flow.cachedIn(viewModelScope)
+    }
+    val remotePhotosNotOnDeviceFlow: Flow<PagingData<RemotePhoto>> by lazy {
+        Pager(
+            config = PagingConfig(pageSize = PAGE_SIZE, jumpThreshold = JUMP_THRESHOLD),
+            pagingSourceFactory = { DbHolder.database.remotePhotoDao().getNotOnDevicePaging() }
+        ).flow.cachedIn(viewModelScope)
+    }
+    val remotePhotosOnDeviceCount: Flow<Int> by lazy {
+        DbHolder.database.photoDao().getAllUploadedCountFlow()
+    }
+    val remotePhotosNotOnDeviceCount: Flow<Int> by lazy {
+        DbHolder.database.remotePhotoDao().getNotOnDeviceCountFlow()
     }
 
     companion object {
