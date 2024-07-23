@@ -35,9 +35,7 @@
 - [x] Entirely Open Source
 
 > [!Note]
-> - [x] This app plugs in with your Telegram bot to manage your photos, keeping you in charge of your data and privacy. 
-> - [x] Your bot is responsible for all operations(upload, download etc.) to and from Telegram and this app is just a client to interact with the bot. 
-> - [x] This app is not meant to and does not endorse spam or any other malicious activities. Please use it at your own responsibility.
+> This app requires access to a Telegram bot to manage your photos, keeping you in charge of your data and privacy. The bot and its owner are responsible for all operations(upload, download etc.) to and from Telegram and this app is just a client to interact with the bot. This app is not meant to and does not endorse spam or any other malicious activities. Please use it responsibly.
 
 <!-- ---------- Download ---------- -->
 
