@@ -77,6 +77,18 @@
 * If you are a developer and wish to contribute to the app, please **fork** the project and submit a [pull request
   ](https://help.github.com/articles/about-pull-requests/). Go through [CONTRIBUTING.md](https://github.com/beradeep/whitehole/blob/master/CONTRIBUTING.md) before contributing.
 
+## Star History
+
+## Star History
+
+<a href="https://star-history.com/#beradeep/whitehole&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=beradeep/whitehole&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=beradeep/whitehole&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=beradeep/whitehole&type=Date" />
+ </picture>
+</a>
+
 ## Credits
 
 * [kotlin-telegram-bot](https://github.com/kotlin-telegram-bot) for the Telegram bot library.
