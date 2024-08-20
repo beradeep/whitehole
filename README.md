@@ -35,9 +35,7 @@
 - [x] Entirely Open Source
 
 > [!Note]
-> - [x] This app plugs in with your Telegram bot to manage your photos, keeping you in charge of your data and privacy. 
-> - [x] Your bot is responsible for all operations(upload, download etc.) to and from Telegram and this app is just a client to interact with the bot. 
-> - [x] This app is not meant to and does not endorse spam or any other malicious activities. Please use it at your own responsibility.
+> This app requires access to a Telegram bot to manage your photos, keeping you in charge of your data and privacy. The bot and its owner are responsible for all operations(upload, download etc.) to and from Telegram and this app is just a client to interact with the bot. This app is not meant to and does not endorse spam or any other malicious activities. Please use it responsibly.
 
 <!-- ---------- Download ---------- -->
 
@@ -76,8 +74,18 @@
 ***All contributions are very welcome!***
 
 * Bug reports and feature requests can be submitted [here](https://github.com/beradeep/whitehole/issues).
-* If you are a developer and wish to contribute to the app, please **fork** the project and submit a [**pull request
-  **](https://help.github.com/articles/about-pull-requests/).
+* If you are a developer and wish to contribute to the app, please **fork** the project and submit a [pull request
+  ](https://help.github.com/articles/about-pull-requests/). Go through [CONTRIBUTING.md](https://github.com/beradeep/whitehole/blob/master/CONTRIBUTING.md) before contributing.
+
+## Star History
+
+<a href="https://star-history.com/#beradeep/whitehole&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=beradeep/whitehole&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=beradeep/whitehole&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=beradeep/whitehole&type=Date" />
+ </picture>
+</a>
 
 ## Credits
 
