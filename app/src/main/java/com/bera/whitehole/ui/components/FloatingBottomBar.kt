@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.bera.whitehole.R
-import com.bera.whitehole.ui.main.pages.local.UploadState
+import com.bera.whitehole.ui.main.screens.local.UploadState
 
 @Composable
 fun FloatingBottomBar(

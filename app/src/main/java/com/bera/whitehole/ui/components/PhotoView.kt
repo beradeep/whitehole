@@ -43,7 +43,7 @@ import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.bera.whitehole.R
 import com.bera.whitehole.data.localdb.entities.Photo
-import com.bera.whitehole.ui.main.pages.local.UploadState
+import com.bera.whitehole.ui.main.screens.local.UploadState
 import com.bera.whitehole.utils.coil.ImageLoaderModule
 import com.bera.whitehole.workers.WorkModule
 import com.bera.whitehole.workers.WorkModule.UPLOADING_ID

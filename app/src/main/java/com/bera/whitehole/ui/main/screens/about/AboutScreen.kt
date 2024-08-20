@@ -1,4 +1,4 @@
-package com.bera.whitehole.ui.main.pages.about
+package com.bera.whitehole.ui.main.screens.about
 
 import android.content.Intent
 import android.net.Uri

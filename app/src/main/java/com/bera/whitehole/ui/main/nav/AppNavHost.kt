@@ -12,12 +12,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.bera.whitehole.ui.main.pages.about.AboutScreen
-import com.bera.whitehole.ui.main.pages.local.LocalPhotoGrid
-import com.bera.whitehole.ui.main.pages.local.LocalViewModel
-import com.bera.whitehole.ui.main.pages.remote.RemotePhotoGrid
-import com.bera.whitehole.ui.main.pages.remote.RemoteViewModel
-import com.bera.whitehole.ui.main.pages.settings.SettingsScreen
+import com.bera.whitehole.ui.main.screens.about.AboutScreen
+import com.bera.whitehole.ui.main.screens.local.LocalPhotoGrid
+import com.bera.whitehole.ui.main.screens.local.LocalViewModel
+import com.bera.whitehole.ui.main.screens.remote.RemotePhotoGrid
+import com.bera.whitehole.ui.main.screens.remote.RemoteViewModel
+import com.bera.whitehole.ui.main.screens.settings.SettingsScreen
 
 @Composable
 fun AppNavHost(

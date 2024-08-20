@@ -171,7 +171,7 @@ fun Onboarding(
                 onClick = {
                     scope.launch {
                         if (inputToken.isNotBlank()) {
-                            Preferences.edit {
+                            Preferences.editEncrypted {
                                 putString(Preferences.botToken, inputToken)
                             }
                             showUidComponent = true

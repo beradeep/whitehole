@@ -1,4 +1,4 @@
-package com.bera.whitehole.ui.main.pages.remote
+package com.bera.whitehole.ui.main.screens.remote
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

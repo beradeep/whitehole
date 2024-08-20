@@ -32,7 +32,7 @@ class PeriodicPhotoBackupWorker(
     private val params: WorkerParameters,
 ) : CoroutineWorker(appContext, params) {
 
-    private val channelId: Long = Preferences.getLong(Preferences.channelId, 0L)
+    private val channelId: Long = Preferences.getEncryptedLong(Preferences.channelId, 0L)
     private val botApi: BotApi = BotApi
     override suspend fun doWork(): Result {
         try {

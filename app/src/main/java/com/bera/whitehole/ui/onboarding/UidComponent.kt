@@ -159,7 +159,7 @@ fun UidComponent(
                             if (id != null) {
                                 if (botApi.getChat(ChatId.fromId(id)) && botApi.chatId == id) {
                                     // verification successful
-                                    Preferences.edit { putLong(Preferences.channelId, id) }
+                                    Preferences.editEncrypted { putLong(Preferences.channelId, id) }
                                     PostHog.identify(id.toString())
                                     botApi.stopPolling()
                                     // navigate to main screen

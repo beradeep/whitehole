@@ -1,4 +1,4 @@
-package com.bera.whitehole.ui.main.pages.local
+package com.bera.whitehole.ui.main.screens.local
 
 enum class UploadState {
     ENQUEUED,

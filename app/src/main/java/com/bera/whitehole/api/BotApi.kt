@@ -24,7 +24,7 @@ object BotApi {
 
     fun create() {
         bot = bot {
-            token = Preferences.getString(
+            token = Preferences.getEncryptedString(
                 Preferences.botToken,
                 SAMPLE_API_KEY
             )

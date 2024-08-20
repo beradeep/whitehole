@@ -1,4 +1,4 @@
-package com.bera.whitehole.ui.main.pages.local
+package com.bera.whitehole.ui.main.screens.local
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -60,7 +60,8 @@ fun LocalPhotoGrid(localPhotos: LazyPagingItems<Photo>, totalCount: Int) {
                     horizontalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     itemsPaging(
-                        items = localPhotos
+                        items = localPhotos,
+                        { it.localId }
                     ) { localPhoto, index ->
                         Box(
                             modifier = Modifier

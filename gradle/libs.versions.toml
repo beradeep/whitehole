@@ -29,6 +29,7 @@ adaptiveNavigationSuite = "1.0.0-alpha07"
 material3-adaptive = "1.0.0-beta03"
 workRuntime = "2.9.0"
 ktlint = "12.1.1"
+securityCrypto = "1.0.0"
 
 
 [libraries]
@@ -72,6 +73,7 @@ okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 posthog-android = { module = "com.posthog:posthog-android", version.ref = "posthogAndroid" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 telegram = { module = "io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram", version.ref = "telegram" }
+androidx-security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "securityCrypto" }
 
 
 [plugins]

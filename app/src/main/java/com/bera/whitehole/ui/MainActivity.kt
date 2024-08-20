@@ -75,7 +75,7 @@ class MainActivity : ComponentActivity() {
             ) == PackageManager.PERMISSION_GRANTED
         }
         val startDestination =
-            if (Preferences.getLong(
+            if (Preferences.getEncryptedLong(
                     Preferences.channelId,
                     0L
                 ) == 0L

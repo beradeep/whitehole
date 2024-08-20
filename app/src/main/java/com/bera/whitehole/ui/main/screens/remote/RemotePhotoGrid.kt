@@ -1,4 +1,4 @@
-package com.bera.whitehole.ui.main.pages.remote
+package com.bera.whitehole.ui.main.screens.remote
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
@@ -191,7 +191,8 @@ fun NotOnDeviceGrid(
                 horizontalArrangement = Arrangement.spacedBy(2.dp)
             ) {
                 itemsPaging(
-                    remotePhotosNotOnDevice
+                    remotePhotosNotOnDevice,
+                    { it.remoteId }
                 ) { remotePhoto, index ->
                     Box(
                         modifier = Modifier

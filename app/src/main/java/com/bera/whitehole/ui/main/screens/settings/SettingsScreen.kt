@@ -1,4 +1,4 @@
-package com.bera.whitehole.ui.main.pages.settings
+package com.bera.whitehole.ui.main.screens.settings
 
 import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -266,7 +266,7 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
             entries = intervals.drop(1).map { it.first },
             values = intervals.drop(1).map { it.second.toString() },
             enabled = isAutoPhotoBackupEnabled,
-            defaultValue = Preferences.defaultAutoBackupInterval.toString()
+            defaultValue = Preferences.defaultAutoExportDatabaseIntervalKey.toString()
         ) {
             WorkModule.PeriodicDbExport.enqueue(forceUpdate = true)
         }

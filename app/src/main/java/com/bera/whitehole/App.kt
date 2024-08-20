@@ -9,6 +9,7 @@ import com.bera.whitehole.data.localdb.Preferences
 import com.bera.whitehole.utils.coil.ImageLoaderModule
 import com.bera.whitehole.utils.connectivity.ConnectivityObserver
 import com.bera.whitehole.workers.WorkModule
+import com.posthog.PostHog
 import com.posthog.android.PostHogAndroid
 import com.posthog.android.PostHogAndroidConfig
 
@@ -29,5 +30,6 @@ class App : Application() {
             host = POSTHOG_HOST
         )
         PostHogAndroid.setup(this, config)
+        PostHog.distinctId()
     }
 }

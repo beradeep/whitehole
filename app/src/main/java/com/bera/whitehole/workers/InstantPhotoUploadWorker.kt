@@ -19,7 +19,7 @@ class InstantPhotoUploadWorker(
     private val params: WorkerParameters,
 ) : CoroutineWorker(appContext, params) {
 
-    private val channelId = Preferences.getLong(Preferences.channelId, 0L)
+    private val channelId = Preferences.getEncryptedLong(Preferences.channelId, 0L)
     private val botApi = BotApi
     override suspend fun doWork(): Result {
         return withContext(Dispatchers.IO) {

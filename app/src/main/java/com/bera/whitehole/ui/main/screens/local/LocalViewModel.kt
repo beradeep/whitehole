@@ -1,4 +1,4 @@
-package com.bera.whitehole.ui.main.pages.local
+package com.bera.whitehole.ui.main.screens.local
 
 import android.net.Uri
 import androidx.compose.ui.util.fastForEach
