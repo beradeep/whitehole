@@ -95,9 +95,10 @@ fun UidComponent(
             )
         }
         Box(
-            Modifier
-                .background(MaterialTheme.colorScheme.surface)
+            modifier = Modifier
                 .clip(RoundedCornerShape(16.dp))
+                .background(MaterialTheme.colorScheme.surface),
+            contentAlignment = Alignment.Center
         ) {
             Column(
                 modifier = modifier.padding(16.dp),
