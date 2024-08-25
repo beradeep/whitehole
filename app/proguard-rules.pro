@@ -160,3 +160,5 @@
 
 -dontwarn android.arch.util.paging.CountedDataSource
 -dontwarn android.arch.persistence.room.paging.LimitOffsetDataSource
+
+-dontwarn com.google.errorprone.annotations.Immutable
