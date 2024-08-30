@@ -13,9 +13,9 @@ Explain examples with code for these updates.
 
 ### 🔠 Naming pull requests
 
-1. If its a new feature: [feature/*]
-2. If it's a bug fix: [bugFix/*]
-3. If it's a documentation update: [documentation/*]
+1. If its a new feature: [feat: *]
+2. If it's a bug fix: [fix: *]
+3. If it's a documentation update: [doc: *]
 
 ### Preparing a pull request for review
 
