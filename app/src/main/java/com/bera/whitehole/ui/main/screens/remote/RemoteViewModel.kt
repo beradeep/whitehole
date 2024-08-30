@@ -9,8 +9,6 @@ import androidx.paging.cachedIn
 import com.bera.whitehole.data.localdb.DbHolder
 import com.bera.whitehole.data.localdb.entities.Photo
 import com.bera.whitehole.data.localdb.entities.RemotePhoto
-import com.bera.whitehole.ui.main.screens.local.LocalViewModel.Companion.JUMP_THRESHOLD
-import com.bera.whitehole.ui.main.screens.local.LocalViewModel.Companion.PAGE_SIZE
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
