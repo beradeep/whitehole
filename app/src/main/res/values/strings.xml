@@ -1,5 +1,16 @@
 <resources>
-    <string name="app_name">Whitehole</string>
+    <!-- Non translatable -->
+    <string name="app_name" translatable="false">Whitehole</string>
+    <string name="upload_single" translatable="false">upload-single</string>
+    <string name="enabled_periodic_backup" translatable="false">enabled-periodic-backup</string>
+    <string name="disabled_periodic_backup" translatable="false">disabled-periodic-backup</string>
+    <string name="restore_all" translatable="false">restore-all</string>
+    <string name="import_db" translatable="false">import-db</string>
+    <string name="export_db" translatable="false">export-db</string>
+    <string name="enabled_periodic_db_export" translatable="false">enabled-periodic-db-export</string>
+    <string name="disabled_periodic_db_export" translatable="false">disabled-periodic-db-export</string>
+
+    <!-- Translatable -->
     <string name="export_successful">Export successful!</string>
     <string name="import_successful">Import successful!</string>
     <string name="connectivity_status_background_color">connectivity status background color</string>
@@ -23,7 +34,6 @@
     <string name="load_error">load error</string>
     <string name="backgroundalpha">backgroundAlpha</string>
     <string name="error">error</string>
-    <string name="upload_single">upload-single</string>
     <string name="app">App</string>
     <string name="version">Version</string>
     <string name="source_code">Source Code</string>
@@ -35,26 +45,19 @@
     <string name="remote_photo_grid">remote-photo-grid</string>
     <string name="periodic_database_export_enabled">Periodic database export enabled.</string>
     <string name="auto_periodic_backup">Auto periodic backup</string>
-    <string name="enabled_periodic_backup">enabled-periodic-backup</string>
     <string name="periodic_backup_enabled">Periodic backup enabled.</string>
-    <string name="disabled_periodic_backup">disabled-periodic-backup</string>
     <string name="periodic_backup_cancelled">Periodic backup cancelled.</string>
     <string name="backup_network_type">Backup network type</string>
     <string name="backup_interval">Backup interval</string>
     <string name="restore_all_from_cloud">Restore all from cloud</string>
     <string name="photos_not_found_on_this_device">%1$s photos not found on this device</string>
-    <string name="restore_all">restore-all</string>
     <string name="restoring_task_enqueued_in_the_background">Restoring task enqueued in the background.</string>
     <string name="import_export"><![CDATA[Import & Export]]></string>
     <string name="import_database">Import database</string>
-    <string name="import_db">import-db</string>
     <string name="export_database">Export database</string>
-    <string name="export_db">export-db</string>
     <string name="whitehole_photos_backup_json">whitehole_photos_backup.json</string>
     <string name="auto_export_database">Auto export database</string>
     <string name="whitehole_auto_photos_backup_json">whitehole_auto_photos_backup.json</string>
-    <string name="enabled_periodic_db_export">enabled-periodic-db-export</string>
-    <string name="disabled_periodic_db_export">disabled-periodic-db-export</string>
     <string name="periodic_database_export_cancelled">Periodic database export cancelled.</string>
     <string name="auto_export_interval">Auto export interval</string>
     <string name="menu_icon">Menu icon</string>
