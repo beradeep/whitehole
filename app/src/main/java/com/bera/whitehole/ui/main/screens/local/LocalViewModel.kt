@@ -13,19 +13,23 @@ import com.bera.whitehole.data.localdb.entities.Photo
 import com.bera.whitehole.workers.WorkModule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class LocalViewModel : ViewModel() {
-    val localPhotosFlow: Flow<PagingData<Photo>> by lazy {
+    val localPhotosFlow: Flow<PagingData<Photo>> =
         Pager(
             config = PagingConfig(pageSize = PAGE_SIZE, jumpThreshold = JUMP_THRESHOLD),
             pagingSourceFactory = { DbHolder.database.photoDao().getAllPaging() }
         ).flow.cachedIn(viewModelScope)
-    }
 
-    val localPhotosCount: Flow<Int> by lazy {
+
+    val localPhotosCount: StateFlow<Int> =
         DbHolder.database.photoDao().getAllCountFlow()
-    }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 0)
+
 
     fun uploadMultiplePhotos(uris: List<Uri>) {
         viewModelScope.launch(Dispatchers.IO) {
