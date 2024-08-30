@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Whitehole</string>
     <string name="export_successful">Dışa aktarma başarılı!</string>
     <string name="import_successful">İçe aktarma başarılı!</string>
     <string name="connectivity_status_background_color">bağlantı durumu arka plan rengi</string>
@@ -23,7 +22,6 @@
     <string name="load_error">yükleme hatası</string>
     <string name="backgroundalpha">arka plan saydamlığı</string>
     <string name="error">hata</string>
-    <string name="upload_single">tek-yükleme</string>
     <string name="app">Uygulama</string>
     <string name="version">Sürüm</string>
     <string name="source_code">Kaynak Kodu</string>
@@ -35,26 +33,19 @@
     <string name="remote_photo_grid">uzaktan-fotoğraf-ızgarası</string>
     <string name="periodic_database_export_enabled">Periyodik veritabanı dışa aktarımı etkinleştirildi.</string>
     <string name="auto_periodic_backup">Otomatik periyodik yedekleme</string>
-    <string name="enabled_periodic_backup">etkin-periyodik-yedekleme</string>
     <string name="periodic_backup_enabled">Periyodik yedekleme etkinleştirildi.</string>
-    <string name="disabled_periodic_backup">devre-dışı-periyodik-yedekleme</string>
     <string name="periodic_backup_cancelled">Periyodik yedekleme iptal edildi.</string>
     <string name="backup_network_type">Yedekleme ağ tipi</string>
     <string name="backup_interval">Yedekleme aralığı</string>
     <string name="restore_all_from_cloud">Tümünü buluttan geri yükle</string>
     <string name="photos_not_found_on_this_device">%1$s fotoğraf bu cihazda bulunamadı</string>
-    <string name="restore_all">hepsini-geri-yükle</string>
     <string name="restoring_task_enqueued_in_the_background">Geri yükleme görevi arka planda sıraya alındı.</string>
     <string name="import_export"><![CDATA[İçe ve Dışa Aktarma]]></string>
     <string name="import_database">Veritabanını içe aktar</string>
-    <string name="import_db">veritabanını-aktar</string>
     <string name="export_database">Veritabanını dışa aktar</string>
-    <string name="export_db">veritabanını-çıkar</string>
     <string name="whitehole_photos_backup_json">whitehole_fotolar_yedek.json</string>
     <string name="auto_export_database">Otomatik veritabanı dışa aktarımı</string>
     <string name="whitehole_auto_photos_backup_json">whitehole_otomatik_fotolar_yedek.json</string>
-    <string name="enabled_periodic_db_export">etkin-periyodik-db-çıkar</string>
-    <string name="disabled_periodic_db_export">devre-dışı-periyodik-db-çıkar</string>
     <string name="periodic_database_export_cancelled">Periyodik veritabanı dışa aktarımı iptal edildi.</string>
     <string name="auto_export_interval">Otomatik dışa aktarma aralığı</string>
     <string name="menu_icon">Menü ikonu</string>
