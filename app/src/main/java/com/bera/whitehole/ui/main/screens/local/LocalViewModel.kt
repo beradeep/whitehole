@@ -25,11 +25,9 @@ class LocalViewModel : ViewModel() {
             pagingSourceFactory = { DbHolder.database.photoDao().getAllPaging() }
         ).flow.cachedIn(viewModelScope)
 
-
     val localPhotosCount: StateFlow<Int> =
         DbHolder.database.photoDao().getAllCountFlow()
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 0)
-
 
     fun uploadMultiplePhotos(uris: List<Uri>) {
         viewModelScope.launch(Dispatchers.IO) {
