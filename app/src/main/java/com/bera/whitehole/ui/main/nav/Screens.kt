@@ -8,16 +8,16 @@ import androidx.compose.material.icons.filled.Smartphone
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class Screens(val displayTitle: String, val route: String, val icon: ImageVector? = null) {
-    object RemotePhotos :
+    data object RemotePhotos :
         Screens(displayTitle = "Cloud", route = "cloud", icon = Icons.Default.Cloud)
 
-    object LocalPhotos :
+    data object LocalPhotos :
         Screens(displayTitle = "Device", route = "device", icon = Icons.Default.Smartphone)
 
-    object Settings :
+    data object Settings :
         Screens(displayTitle = "Settings", route = "settings", icon = Icons.Default.Settings)
 
-    object About : Screens(displayTitle = "About", route = "about", icon = Icons.Default.Info)
+    data object About : Screens(displayTitle = "About", route = "about", icon = Icons.Default.Info)
 
     companion object {
         val drawerScreens by lazy { listOf(LocalPhotos, RemotePhotos, Settings, About) }

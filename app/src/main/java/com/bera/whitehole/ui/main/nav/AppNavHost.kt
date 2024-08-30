@@ -35,7 +35,7 @@ fun AppNavHost(
         ) {
             val viewModel: LocalViewModel = screenScopedViewModel()
             val localPhotos = viewModel.localPhotosFlow.collectAsLazyPagingItems()
-            val localPhotosCount by viewModel.localPhotosCount.collectAsStateWithLifecycle(0)
+            val localPhotosCount by viewModel.localPhotosCount.collectAsStateWithLifecycle()
             LocalPhotoGrid(localPhotos = localPhotos, totalCount = localPhotosCount)
         }
         composable(
@@ -43,14 +43,9 @@ fun AppNavHost(
         ) {
             val viewModel: RemoteViewModel = screenScopedViewModel()
             val remotePhotosOnDevice = viewModel.remotePhotosOnDeviceFlow.collectAsLazyPagingItems()
-            val remotePhotosNotOnDevice =
-                viewModel.remotePhotosNotOnDeviceFlow.collectAsLazyPagingItems()
-            val remotePhotosOnDeviceCount by viewModel.remotePhotosOnDeviceCount.collectAsStateWithLifecycle(
-                0
-            )
-            val remotePhotosNotOnDeviceCount by viewModel.remotePhotosNotOnDeviceCount.collectAsStateWithLifecycle(
-                0
-            )
+            val remotePhotosNotOnDevice = viewModel.remotePhotosNotOnDeviceFlow.collectAsLazyPagingItems()
+            val remotePhotosOnDeviceCount by viewModel.remotePhotosOnDeviceCount.collectAsStateWithLifecycle()
+            val remotePhotosNotOnDeviceCount by viewModel.remotePhotosNotOnDeviceCount.collectAsStateWithLifecycle()
             RemotePhotoGrid(
                 remotePhotosOnDevice,
                 remotePhotosNotOnDevice,
