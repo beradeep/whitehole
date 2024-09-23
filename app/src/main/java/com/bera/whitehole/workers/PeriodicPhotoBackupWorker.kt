@@ -76,7 +76,7 @@ class PeriodicPhotoBackupWorker(
                             }
                         } while (outputBytes.size > compressionThresholdInBytes && quality > 25)
                         tempFile = File.createTempFile(
-                            "${Random.nextLong()}",
+                            "${Random.nextLong()}.",
                             ext
                         )
                         tempFile.writeBytes(outputBytes)
