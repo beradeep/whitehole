@@ -98,7 +98,7 @@ suspend fun sendFileViaUri(
     val fileExtension = getExtFromMimeType(mimeType!!)
     val inputStream = contentResolver.openInputStream(uri)
     inputStream?.use { ipStream ->
-        val tempFile = File.createTempFile(Random.nextLong().toString(), fileExtension)
+        val tempFile = File.createTempFile(Random.nextLong().toString(), ".$fileExtension")
         val outputStream = FileOutputStream(tempFile)
         ipStream.copyTo(outputStream)
         sendFileApi(
