@@ -76,8 +76,8 @@ class PeriodicPhotoBackupWorker(
                             }
                         } while (outputBytes.size > compressionThresholdInBytes && quality > 25)
                         tempFile = File.createTempFile(
-                            "${Random.nextLong()}",
-                            ext
+                            Random.nextLong().toString(),
+                            ".$ext"
                         )
                         tempFile.writeBytes(outputBytes)
                         sendFileApi(botApi, channelId, uri, tempFile, ext!!)
