@@ -61,7 +61,7 @@
     <string name="periodic_database_export_cancelled">Periodic database export cancelled.</string>
     <string name="auto_export_interval">Auto export interval</string>
     <string name="menu_icon">Menu icon</string>
-    <string name="syncing_your_photos">Syncing your photos</string>
+    <string name="syncing_your_photos">Syncing photos</string>
     <string name="onboarding_visibility">onboarding-visibility</string>
     <string name="supporttext">SupportText</string>
     <string name="recommended_to_only_copy_paste_to_avoid_error">Simple copy and paste to avoid error.</string>

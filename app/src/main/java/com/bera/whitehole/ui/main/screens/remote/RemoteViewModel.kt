@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.stateIn
 class RemoteViewModel : ViewModel() {
     val remotePhotosOnDeviceFlow: Flow<PagingData<Photo>> =
         Pager(
-            config = PagingConfig(pageSize = PAGE_SIZE, jumpThreshold = JUMP_THRESHOLD),
+            config = PagingConfig(pageSize = PAGE_SIZE, prefetchDistance = PREFETCH_DISTANCE, jumpThreshold = JUMP_THRESHOLD),
             pagingSourceFactory = { DbHolder.database.photoDao().getAllUploadedPaging() }
         ).flow.cachedIn(viewModelScope)
 
@@ -37,6 +37,7 @@ class RemoteViewModel : ViewModel() {
 
     companion object {
         const val PAGE_SIZE = 32
-        const val JUMP_THRESHOLD = 3 * 32
+        const val PREFETCH_DISTANCE = 5 * 32
+        const val JUMP_THRESHOLD = 5 * 32
     }
 }

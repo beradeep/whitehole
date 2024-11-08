@@ -21,9 +21,10 @@ class SyncDbMediaStoreWorker(
     private val context: Context,
     params: WorkerParameters,
 ) : CoroutineWorker(context, params) {
+
     override suspend fun doWork(): Result {
-        try {
-            withContext(Dispatchers.Default) {
+        return withContext(Dispatchers.Default) {
+            try {
                 val resolver = context.contentResolver
                 val collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
                 val projection = arrayOf(
@@ -56,13 +57,13 @@ class SyncDbMediaStoreWorker(
                 deletedPhotos.fastForEach {
                     DbHolder.database.photoDao().deleteById(it.localId)
                 }
+                Log.d("Sync MediaStore", "doWork: Success")
+                Result.success()
+            } catch (e: Exception) {
+                Log.d("Sync MediaStore", "doWork: ${e.localizedMessage}")
+                context.toastFromMainThread(e.localizedMessage)
+                Result.failure()
             }
-            Log.d("Sync MediaStore", "doWork: Success")
-            return Result.success()
-        } catch (e: Exception) {
-            Log.d("Sync MediaStore", "doWork: ${e.localizedMessage}")
-            context.toastFromMainThread(e.localizedMessage)
-            return Result.failure()
         }
     }
 

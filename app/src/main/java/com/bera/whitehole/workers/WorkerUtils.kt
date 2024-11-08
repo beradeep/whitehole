@@ -9,7 +9,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
-import androidx.work.ForegroundInfo
 import com.bera.whitehole.R
 import com.bera.whitehole.workers.WorkModule.CHANNEL_ID
 import com.bera.whitehole.workers.WorkModule.NOTIFICATION_TITLE
@@ -52,8 +51,4 @@ fun makeStatusNotification(message: String, context: Context): Notification {
         }
     }
     return builder.build()
-}
-
-fun createForegroundInfo(id: Int, notification: Notification): ForegroundInfo {
-    return ForegroundInfo(id, notification)
 }

@@ -14,10 +14,13 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -42,10 +45,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.bera.whitehole.R
 import com.bera.whitehole.api.BotApi
 import com.bera.whitehole.data.localdb.Preferences
@@ -60,7 +63,7 @@ import kotlinx.coroutines.launch
 fun OnboardingPage(
     modifier: Modifier = Modifier,
     botApi: BotApi = BotApi,
-    navController: NavController = rememberNavController(),
+    onProceed: () -> Unit = {},
 ) {
     val connectivityObserver = remember { ConnectivityObserver }
     val connection by connectivityObserver.observe()
@@ -76,7 +79,7 @@ fun OnboardingPage(
         if (it) {
             NoInternetScreen(isConnected = isConnected)
         } else {
-            Onboarding(modifier = Modifier.fillMaxSize(), navController = navController)
+            Onboarding { onProceed() }
         }
     }
 
@@ -93,9 +96,7 @@ fun OnboardingPage(
 
 @Composable
 fun Onboarding(
-    modifier: Modifier = Modifier,
-    botApi: BotApi = BotApi,
-    navController: NavController = rememberNavController(),
+    onProceed: () -> Unit = {},
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -103,6 +104,7 @@ fun Onboarding(
     var isValidToken by remember { mutableStateOf(true) }
     var showDisclaimer by remember { mutableStateOf(true) }
     var showUidComponent by remember { mutableStateOf(false) }
+    var showToken by remember { mutableStateOf(value = false) }
     Surface(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -159,6 +161,26 @@ fun Onboarding(
                 singleLine = true,
                 shape = RoundedCornerShape(16.dp),
                 textStyle = MaterialTheme.typography.bodySmall,
+                trailingIcon = {
+                    if (showToken) {
+                        IconButton(onClick = { showToken = false }) {
+                            Icon(
+                                imageVector = Icons.Filled.Visibility,
+                                contentDescription = "hide_password"
+                            )
+                        }
+                    } else {
+                        IconButton(
+                            onClick = { showToken = true }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.VisibilityOff,
+                                contentDescription = "hide_password"
+                            )
+                        }
+                    }
+                },
+                visualTransformation = if (showToken) VisualTransformation.None else PasswordVisualTransformation(),
                 modifier = Modifier
                     .width(300.dp)
             )
@@ -255,11 +277,7 @@ fun Onboarding(
             UidComponent(
                 onDismissRequest = {},
                 onNavigate = {
-                    navController.navigate(context.getString(R.string.main)) {
-                        popUpTo("onboarding") {
-                            inclusive = true
-                        }
-                    }
+                    onProceed()
                 }
             )
         }

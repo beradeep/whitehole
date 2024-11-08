@@ -2,6 +2,7 @@ package com.bera.whitehole.workers
 
 import android.content.Context
 import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
+import android.util.Log
 import androidx.core.net.toUri
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
@@ -10,6 +11,8 @@ import com.bera.whitehole.R
 import com.bera.whitehole.data.localdb.backup.BackupHelper
 import com.bera.whitehole.utils.toastFromMainThread
 import com.bera.whitehole.workers.WorkModule.NOTIFICATION_ID
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class PeriodicDbExportWorker(
     private val appContext: Context,
@@ -17,16 +20,17 @@ class PeriodicDbExportWorker(
 ) : CoroutineWorker(appContext, params) {
 
     override suspend fun doWork(): Result {
-        try {
-            setForeground(
-                foregroundInfo = getForegroundInfo()
-            )
-        } catch (e: IllegalStateException) {
-            appContext.toastFromMainThread(e.localizedMessage)
+        return withContext(Dispatchers.Default) {
+            try {
+                val uri = params.inputData.getString(KEY_URI)!!
+                BackupHelper.exportDatabase(uri.toUri(), appContext)
+                Result.success()
+            } catch (e: Exception) {
+                Log.d("PeriodicDbExportWorker", "doWork: ${e.localizedMessage}")
+                appContext.toastFromMainThread(e.localizedMessage)
+                Result.failure()
+            }
         }
-        val uri = params.inputData.getString(KEY_URI) ?: return Result.failure()
-        BackupHelper.exportDatabase(uri.toUri(), appContext)
-        return Result.success()
     }
 
     override suspend fun getForegroundInfo(): ForegroundInfo {

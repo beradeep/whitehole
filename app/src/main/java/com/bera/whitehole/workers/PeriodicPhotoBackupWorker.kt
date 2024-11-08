@@ -17,15 +17,14 @@ import com.bera.whitehole.data.localdb.Preferences
 import com.bera.whitehole.utils.getExtFromMimeType
 import com.bera.whitehole.utils.getMimeTypeFromUri
 import com.bera.whitehole.utils.sendFileApi
-import com.bera.whitehole.utils.toastFromMainThread
 import com.bera.whitehole.workers.WorkModule.NOTIFICATION_ID
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 import kotlin.math.roundToInt
 import kotlin.random.Random
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class PeriodicPhotoBackupWorker(
     private val appContext: Context,
@@ -35,21 +34,14 @@ class PeriodicPhotoBackupWorker(
     private val channelId: Long = Preferences.getEncryptedLong(Preferences.channelId, 0L)
     private val botApi: BotApi = BotApi
     override suspend fun doWork(): Result {
-        try {
-            setForeground(
-                foregroundInfo = getForegroundInfo()
-            )
-        } catch (e: IllegalStateException) {
-            appContext.toastFromMainThread(e.localizedMessage)
-        }
         val compressionThresholdInBytes = params.inputData.getLong(
             KEY_COMPRESSION_THRESHOLD,
             0L
         )
         val imageList = DbHolder.database.photoDao().getAllNotUploaded()
         return withContext(Dispatchers.IO) {
-            lateinit var tempFile: File
             try {
+                lateinit var tempFile: File
                 imageList.fastForEach { photo ->
                     val uri = photo.pathUri.toUri()
                     try {
@@ -57,7 +49,7 @@ class PeriodicPhotoBackupWorker(
                         val ext = getExtFromMimeType(mimeType!!)
                         val bytes = appContext.contentResolver.openInputStream(uri)?.use {
                             it.readBytes()
-                        } ?: return@withContext Result.failure()
+                        }!!
                         val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
                         var outputBytes: ByteArray
                         var quality = 100

@@ -14,10 +14,9 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.bera.whitehole.data.localdb.Preferences
-import java.time.Duration
-import java.util.UUID
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn
+import java.time.Duration
 
 object WorkModule {
     private lateinit var manager: WorkManager
@@ -43,17 +42,15 @@ object WorkModule {
         ).toLong()
 
         private val periodicUploadWorkRequest =
-            PeriodicWorkRequestBuilder<PeriodicPhotoBackupWorker>(
-                Duration.ofDays(repeatIntervalDays)
-            )
+            PeriodicWorkRequestBuilder<PeriodicPhotoBackupWorker>(Duration.ofDays(repeatIntervalDays))
                 .setInputData(
                     workDataOf(PeriodicPhotoBackupWorker.KEY_COMPRESSION_THRESHOLD to 1024 * 50L)
                 )
                 .setConstraints(constraints)
                 .setInitialDelay(Duration.ofDays(1))
                 .setBackoffCriteria(
-                    backoffPolicy = BackoffPolicy.EXPONENTIAL,
-                    duration = Duration.ofMinutes(10)
+                    backoffPolicy = BackoffPolicy.LINEAR,
+                    duration = Duration.ofMinutes(40)
                 )
                 .build()
 
@@ -73,14 +70,11 @@ object WorkModule {
     object SyncMediaStore {
 
         private val periodicSyncMediaStoreRequest =
-            PeriodicWorkRequestBuilder<PeriodicPhotoBackupWorker>(Duration.ofHours(24))
-                .setInputData(
-                    workDataOf(PeriodicPhotoBackupWorker.KEY_COMPRESSION_THRESHOLD to 1024 * 50L)
-                )
+            PeriodicWorkRequestBuilder<SyncDbMediaStoreWorker>(Duration.ofDays(1))
                 .setInitialDelay(Duration.ofDays(1))
                 .setBackoffCriteria(
-                    backoffPolicy = BackoffPolicy.EXPONENTIAL,
-                    duration = Duration.ofMinutes(10)
+                    backoffPolicy = BackoffPolicy.LINEAR,
+                    duration = Duration.ofMinutes(40)
                 )
                 .build()
 
@@ -201,13 +195,6 @@ object WorkModule {
 
     fun observeWorkerByName(name: String) = manager.getWorkInfosForUniqueWorkFlow(name)
         .flowOn(Dispatchers.IO)
-
-    fun observeWorkerById(id: String) = manager.getWorkInfoByIdFlow(UUID.fromString(id))
-        .flowOn(Dispatchers.IO)
-
-    fun cancelPeriodicBackupWorker() {
-        manager.cancelUniqueWork(PERIODIC_PHOTO_BACKUP_WORK)
-    }
 
     const val PERIODIC_PHOTO_BACKUP_WORK = "PeriodicPhotoBackupWork"
     const val SYNC_MEDIA_STORE_WORK = "SyncMediaStoreWork"

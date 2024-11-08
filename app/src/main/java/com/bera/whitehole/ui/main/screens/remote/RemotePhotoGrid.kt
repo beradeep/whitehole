@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -30,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -51,17 +53,22 @@ fun RemotePhotoGrid(
     remotePhotosNotOnDeviceCount: Int,
 ) {
     var onDevice by remember { mutableStateOf(true) }
-    Column {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(2.dp)
+    ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            Modifier
+                .height(40.dp)
+                .padding(horizontal = 8.dp),
+            Arrangement.spacedBy(8.dp),
+            Alignment.CenterVertically
         ) {
-            Spacer(modifier = Modifier.size(8.dp))
             FilterChip(
                 selected = onDevice,
                 onClick = { onDevice = true },
                 label = { Text(text = stringResource(R.string.on_device)) }
             )
-            Spacer(modifier = Modifier.size(8.dp))
             FilterChip(
                 selected = !onDevice,
                 onClick = { onDevice = false },
@@ -73,9 +80,9 @@ fun RemotePhotoGrid(
                     R.string.photos,
                     if (onDevice) remotePhotosOnDeviceCount else remotePhotosNotOnDeviceCount
                 ),
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
+                fontStyle = FontStyle.Italic
             )
-            Spacer(modifier = Modifier.size(8.dp))
         }
         AnimatedContent(
             targetState = onDevice,

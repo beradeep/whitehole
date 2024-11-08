@@ -6,9 +6,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -27,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -41,11 +44,24 @@ import com.bera.whitehole.ui.components.itemsPaging
 fun LocalPhotoGrid(localPhotos: LazyPagingItems<Photo>, totalCount: Int) {
     var selectedIndex by remember { mutableStateOf<Int?>(null) }
     Column(
-        modifier = Modifier.fillMaxSize().padding(2.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(2.dp),
         verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
-        Row(Modifier.fillMaxWidth(), Arrangement.End) {
-            Text(text = "$totalCount photos", style = MaterialTheme.typography.bodySmall)
+        Row(
+            Modifier
+                .height(40.dp)
+                .padding(horizontal = 8.dp),
+            Arrangement.spacedBy(8.dp),
+            Alignment.CenterVertically
+        ) {
+            Spacer(Modifier.weight(1f))
+            Text(
+                text = "$totalCount photos",
+                style = MaterialTheme.typography.bodySmall,
+                fontStyle = FontStyle.Italic
+            )
         }
         Box(
             modifier = Modifier.fillMaxSize()

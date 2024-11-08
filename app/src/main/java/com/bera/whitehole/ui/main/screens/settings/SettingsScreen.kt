@@ -105,7 +105,7 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
 
     val scrollState = rememberScrollState()
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp)
             .verticalScroll(scrollState)
@@ -260,7 +260,7 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(6.dp))
 
         ListDialogCard(
-            prefKey = Preferences.autoBackupIntervalKey,
+            prefKey = Preferences.autoExportDatabaseIntervalKey,
             title = stringResource(R.string.auto_export_interval),
             icon = Icons.Rounded.AccessTime,
             entries = intervals.drop(1).map { it.first },

@@ -25,14 +25,12 @@ class DownloadMissingPhotosWorker(
 ) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result {
         try {
-            setForeground(
-                foregroundInfo = getForegroundInfo()
-            )
+            setForeground(getForegroundInfo())
         } catch (e: IllegalStateException) {
-            context.toastFromMainThread(e.localizedMessage)
+            Log.d("DownloadMissingPhotosWorker", "doWork: ${e.localizedMessage}")
         }
-        try {
-            withContext(Dispatchers.IO) {
+        return withContext(Dispatchers.IO) {
+            try {
                 val remoteIdList = DbHolder.database.remotePhotoDao().getNotOnDevice()
                 val photosToInsert = mutableListOf<Photo>()
                 val remotesPhotosToRemove = mutableListOf<RemotePhoto>()
@@ -83,12 +81,12 @@ class DownloadMissingPhotosWorker(
                     }
                 DbHolder.database.photoDao().insertPhotos(*photosToInsert.toTypedArray())
                 DbHolder.database.remotePhotoDao().deleteAll(*remotesPhotosToRemove.toTypedArray())
+                Result.success()
+            } catch (e: Exception) {
+                Log.d("DownloadMissingPhotosWorker", "doWork: ${e.localizedMessage}")
+                context.toastFromMainThread(e.localizedMessage)
+                Result.failure()
             }
-            return Result.success()
-        } catch (e: Exception) {
-            Log.d("Download All Photos", "doWork: ${e.localizedMessage}")
-            context.toastFromMainThread(e.localizedMessage)
-            return Result.failure()
         }
     }
 
